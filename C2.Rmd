@@ -134,6 +134,71 @@ urban$rate_urb=str_extract_all(string = COLSUCIA,
 head(urban[,-2]) 
 ```
 
+Me salió, ¡yas!
+
+
+2 USO DE PARTICIONES: fOrma distinta a la anterior pero que da el mismo resultado!
+
+```{r}
+test=urban[1,2]
+test
+```
+2 variables: población urbana y taza de urbanización
+
+para dividir esa cadena de texto usamos lo siguiente:
+```{r}
+str_split(string = test,
+          pattern = 'rate of urbanization:')
+```
+
+Creando las dos columnas AUN ESTAN SUCIAS!:
+```{r}
+urban$pop_urb2=str_split(string = urban$Urbanization,
+                         pattern = 'rate of urbanization:',
+                         simplify = T)[,1]
+
+urban$rate_urb2=str_split(string = urban$Urbanization,
+                          pattern = 'rate of urbanization:',
+                          simplify = T)[,2]
+```
+
+A limpiar las columnas: 
+
+```{r}
+#Probemos con una celda:
+urban$pop_urb2[1]
+
+urban$pop_urb2=str_split(urban$pop_urb2,
+                         '% of total',
+                         simplify = T)[,1] #borro "simplify="?
+
+#veamos:
+urban$pop_urb2[1]
+```
+
+Usamos un símbolo (divisor) para que nos salga la segunda columna, ya que la anterior solo es la 1era:
+```{r}
+urban$pop_urb2=str_split(urban$pop_urb2,
+                         ':',
+                         simplify = T)[,2]
+
+#Veamos:
+urban$pop_urb2
+```
+
+Sigamos lo hecho antes para la segunda columna:
+```{r}
+urban$rate_urb2[1]
+```
+
+```{r}
+urban$rate_urb2=str_split(urban$rate_urb2,pattern = '%',simplify = T)[,1]
+
+#Veamos
+head(urban[,-2])
+```
+
+3. Parsers
 
 
 

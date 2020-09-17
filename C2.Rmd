@@ -359,13 +359,31 @@ head(democracy)
 Corregir los etiquetados:
 ```{r}
 names(democracy)=str_split(string = names(democracy),
-          pattern = '>>', simplify = T) [,1]
+          pattern = ' >>', simplify = T) [,1]
 head(democracy)
 
+
+```
+```{r}
+democracy[2]
+names(democracy)
+democracy$`Changes fromlast year `=NULL
+head(democracy)
+democracy$Country=str_split(string = names(democracy),
+          pattern = '>>', simplify = T) [,1]
 ```
 
 ```{r}
-gsub(" ", "",names(democracy))
+names(democracy)=gsub(" ", "",names(democracy))
+head(democracy)
+```
+```{r}
+democracy$Country=gsub("Â", "",democracy$Country)
+head(democracy)
+```
+```{r}
+names(democracy)=gsub("Â", "",names(democracy))
+head(democracy)
 ```
 
 
@@ -385,7 +403,7 @@ comparison[1,4]
 
 
 ```{r}
-str_extract_all(comparison$'GDP - per capita (PPP)',
+str_extract_all(comparison$`GDP - per capita (PPP)`,
                 "(\\d+\\.*\\d*)(?=\\%)")
 str_extract_all(comparison$`GDP - per capita (PPP)`,
                 "(\\-*\\d+\\.*\\d*)(?=\\%)")
@@ -412,6 +430,15 @@ head(indices)
 indices$`2020 Index of Economic Freedom`=trimws(indices$`2020 Index of Economic Freedom`,whitespace = "[\\h\\v]")
 ```
 
+```{r}
+names(indices)
+```
+
+
+```{r}
+indices$Country=gsub("Â", "",indices$Country)
+head(indices)
+```
 
 
 

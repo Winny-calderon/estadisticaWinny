@@ -1,6 +1,7 @@
 ---
-title: "R Notebook"
+title: "Clase 3"
 output: html_notebook
+date: "17/09/20"
 ---
 
 Unidad 2: Limpieza de datos
@@ -199,6 +200,235 @@ head(urban[,-2])
 ```
 
 3. Parsers
+
+
+```{r}
+library(readr)
+
+parse_number(x = "$139,100 32")
+```
+
+solo recupera el primer valor:
+```{r}
+parse_number(urban$Urbanization)
+```
+
+Usarlo combinado con estrtegia separadora:
+```{r}
+library(magrittr) # para %>%
+
+str_split(string = urban$Urbanization,
+          pattern = 'rate of urbanization:',
+          simplify = T)[,1]    #%>%parse_number()
+```
+
+```{r}
+str_split(string = urban$Urbanization,
+          pattern = 'rate of urbanization:',
+          simplify = T)[,2]  #%>%parse_number()
+```
+
+
+OTRAS FUNCIONES
+La función "gsub" busca un character y lo reemplaza:
+```{r}
+porcentajes=c('13%','33%','55%')
+gsub('%',"",porcentajes) # lo reemplaza por nada ''
+```
+
+Siguiendo el ejemplo anterior:
+```{r}
+gsub(',|\\$',"","$139,100")
+```
+
+Post.limpieza debemos de verificar el tipo de datos:
+```{r}
+str(urban)
+```
+
+Eliminemos las columnas repetidas y la original "sucia" usando NULL:
+```{r}
+urban[,c(2,5,6)]=NULL
+```
+
+Pasémolas a números. Usar lapply (permite aplicar una funcion a varias columnas):
+```{r}
+urban[,-1]=lapply(urban[,-1], as.numeric)
+```
+PREGUNTAS POR QUÉ VA "-1" ALLÍ
+
+Por la conversión algunos valores de celda se pueden convertir en perdidos, por ello, verifiquemos donde hay filas incompletas con el comando "complete.cases()":
+```{r}
+urban[!complete.cases(urban),]
+```
+
+"trimws()": elimina espacios en blanco antes y despues del texto
+```{r}
+textos=c(' abc','pqr ', ' xyz ')
+trimws(textos,whitespace = "[\\h\\v]")
+```
+
+Hagamos eso con la columna que contiene texto:
+```{r}
+urban$Country=trimws(urban$Country,whitespace = "[\\h\\v]")
+
+#Finalmente:
+str(urban)
+```
+
+ACTIVIDADES:
+
+EJERCICIO 1:
+```{r}
+linkCIA_emissions="https://www.cia.gov/library/publications/resources/the-world-factbook/fields/274.html"
+linkPath_emissions='//*[@id="fieldListing"]'
+
+co2_emi = htmltab(doc = linkCIA_emissions, 
+                which =linkPath_emissions)
+names(co2_emi)[names(co2_emi) == 'Carbon dioxide emissions from consumption of energy'] <- 'CarbonEmissions'
+```
+
+Verificamos la falla:
+```{r}
+head(co2_emi)
+```
+
+```{r}
+co2_emi[1,2]
+```
+
+```{r}
+test1=co2_emi[1,2]
+test1
+```
+```{r}
+str_split(string = test1,
+          pattern = 'Mt')
+```
+
+Crear las columnas:
+```{r}
+co2_emi$emission1=str_split(string = co2_emi$CarbonEmissions, pattern = 'Mt', simplify = T)[,1]
+
+co2_emi$emission2=str_split(string = co2_emi$CarbonEmissions, pattern = ' ', simplify = T)[,2]
+```
+Limpiar segunda columna.
+```{r}
+co2_emi$emission1[2]
+```
+```{r}
+head(co2_emi)
+tail(co2_emi)
+```
+OJO CON ESTO!! NO ME SALE :´()::
+```{r}
+co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="million",10**6)
+co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="billion",10**9)
+co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="",10**0)
+head(co2_emi)
+```
+
+
+```{r}
+co2_emi[,c(4)]=NULL
+head(co2_emi)
+```
+```{r}
+co2_emi[,c(2)]=NULL
+head(co2_emi)
+```
+
+
+```{r}
+gsub(',',"",co2_emi)
+head(co2_emi)
+```
+
+EJERCICIO 2:
+
+```{r}
+LinkDemo="https://en.wikipedia.org/wiki/Democracy_Index"
+LinkPath_demo='//*[@id="mw-content-text"]/div[1]/table[2]'  
+
+
+democracy = htmltab(doc = LinkDemo, 
+                which =LinkPath_demo)
+
+head(democracy)
+```
+Corregir los etiquetados:
+```{r}
+names(democracy)=str_split(string = names(democracy),
+          pattern = '>>', simplify = T) [,1]
+head(democracy)
+
+```
+
+```{r}
+gsub(" ", "",names(democracy))
+```
+
+
+EJERCICIO 3:
+
+```{r}
+link_comparison="https://www.cia.gov/library/publications/resources/the-world-factbook/fields/211rank.html"
+linkPath_comparison= '//*[@id="rankOrder"]'
+
+comparison= htmltab(doc = link_comparison, 
+                which =linkPath_comparison)
+head(comparison)
+```
+```{r}
+comparison[1,4]
+```
+
+
+```{r}
+str_extract_all(comparison$'GDP - per capita (PPP)',
+                "(\\d+\\.*\\d*)(?=\\%)")
+str_extract_all(comparison$`GDP - per capita (PPP)`,
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")
+head(comparison)
+```
+
+
+
+EJERCICIO 4: 
+```{r}
+link_indices="https://en.wikipedia.org/wiki/List_of_freedom_indices"
+linkPath_indices='//*[@id="mw-content-text"]/div[1]/table[2]'
+
+indices= htmltab(doc = link_indices, 
+                which =linkPath_indices)
+indices[1,2]
+
+head(indices)
+```
+los N/A:
+```{r}
+indices[!complete.cases(indices),]
+head(indices)
+indices$`2020 Index of Economic Freedom`=trimws(indices$`2020 Index of Economic Freedom`,whitespace = "[\\h\\v]")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

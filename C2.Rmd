@@ -285,63 +285,53 @@ linkPath_emissions='//*[@id="fieldListing"]'
 
 co2_emi = htmltab(doc = linkCIA_emissions, 
                 which =linkPath_emissions)
-names(co2_emi)[names(co2_emi) == 'Carbon dioxide emissions from consumption of energy'] <- 'CarbonEmissions'
+names(co2_emi)[2]="co2"
 ```
+Separar en columnas:
+```{r}
+#antes de parentesis
+co2_emi$valor=str_split(string = co2_emi$co2, pattern = '\\(', simplify = T)[,1]
 
-Verificamos la falla:
-```{r}
-head(co2_emi)
+#despues de parentesis
+co2_emi$year=str_split(string = co2_emi$co2, pattern = '\\(', simplify = T)[,2]
 ```
+Limpiar el año:
+```{r}
+co2_emi$year=str_split(string = co2_emi$year, pattern = ' ', simplify = T)[,1]
+```
+Limpiar unidad y valor:
+```{r}
+#primero limpiar unidad
+co2_emi$unidad=str_split(string = co2_emi$valor, pattern = ' ', simplify = T)[,2]
+#limpiar valor
 
-```{r}
-co2_emi[1,2]
+co2_emi$valor=str_split(string = co2_emi$valor, pattern = ' ', simplify = T)[,1]
 ```
+Reemplazar unidades:
+```{r}
+co2_emi$unidad=gsub("million",6,co2_emi$unidad)
+co2_emi$unidad=gsub("billion",9,co2_emi$unidad)
+co2_emi$unidad=gsub("Mt",0,co2_emi$unidad)
+```
+Reemplazar valores:
+```{r}
+#cambio de datos
+library(readr)
 
-```{r}
-test1=co2_emi[1,2]
-test1
-```
-```{r}
-str_split(string = test1,
-          pattern = 'Mt')
-```
+co2_emi$valor=parse_number(co2_emi$valor)
 
-Crear las columnas:
-```{r}
-co2_emi$emission1=str_split(string = co2_emi$CarbonEmissions, pattern = 'Mt', simplify = T)[,1]
-
-co2_emi$emission2=str_split(string = co2_emi$CarbonEmissions, pattern = ' ', simplify = T)[,2]
+#unidad
+co2_emi$unidad=parse_number(co2_emi$unidad)
 ```
-Limpiar segunda columna.
+Conversion
 ```{r}
-co2_emi$emission1[2]
+co2_emi$valor=co2_emi$valor*(10**co2_emi$unidad)
 ```
+Elminamos las columnas que no nos sirven
 ```{r}
-head(co2_emi)
-tail(co2_emi)
-```
-OJO CON ESTO!! NO ME SALE :´()::
-```{r}
-co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="million",10**6)
-co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="billion",10**9)
-co2_emi$emissions_2=replace(co2_emi$emissions_2, co2_emi$emissions_2=="",10**0)
-head(co2_emi)
-```
-
-
-```{r}
-co2_emi[,c(4)]=NULL
-head(co2_emi)
-```
-```{r}
-co2_emi[,c(2)]=NULL
-head(co2_emi)
-```
-
-
-```{r}
-gsub(',',"",co2_emi)
-head(co2_emi)
+co2_emi$co2=NULL
+co2_emi$year=NULL
+co2_emi$unidad=NULL
 ```
 
 EJERCICIO 2:
@@ -353,37 +343,27 @@ LinkPath_demo='//*[@id="mw-content-text"]/div[1]/table[2]'
 
 democracy = htmltab(doc = LinkDemo, 
                 which =LinkPath_demo)
-
-head(democracy)
 ```
 Corregir los etiquetados:
 ```{r}
 names(democracy)=str_split(string = names(democracy),
-          pattern = ' >>', simplify = T) [,1]
-head(democracy)
-
-
+          pattern = ' >>', simplify = T)[,1]
 ```
-```{r}
-democracy[2]
-names(democracy)
-democracy$`Changes fromlast year `=NULL
-head(democracy)
-democracy$Country=str_split(string = names(democracy),
-          pattern = '>>', simplify = T) [,1]
-```
-
+Corregir los espacios en blanco
 ```{r}
 names(democracy)=gsub(" ", "",names(democracy))
-head(democracy)
 ```
+corregir las letras A medias extrañas:
 ```{r}
+#en Country
 democracy$Country=gsub("Â", "",democracy$Country)
-head(democracy)
-```
-```{r}
+
+#en todos los etiquetados
 names(democracy)=gsub("Â", "",names(democracy))
-head(democracy)
+```
+Eliminar la columna que no sirve
+```{r}
+democracy$Changesfromlastyear=NULL
 ```
 
 

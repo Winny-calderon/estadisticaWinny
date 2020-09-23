@@ -1,0 +1,90 @@
+---
+title: "Práctica Califica 2"
+Alumna: Calderon Alor Winny
+output: html_notebook
+---
+Ejercicio 1:
+
+Primero debemos de crear el objeto "link", del cual obtendremos nuestra base de datos. Luego scrapearemos la tabla obtenida, y la etiquetaremos como "linkPath".
+```{r}
+link="https://www.cia.gov/library/publications/resources/the-world-factbook/fields/343.html"
+linkPath='//*[@id="fieldListing"]'
+
+library(htmltab)
+dataCIA= htmltab(doc =link,
+               which =linkPath)
+#Para saber cuántas observaciones y variables tiene nuestra abse de datos, usamos str:
+str(dataCIA)
+class(dataCIA)
+```
+Respuesta 1: Nuestra base cuenta con 230 observacones y 2 variables; las variables sob country y median age. De acuerdo a esto, Country es un objeto de tipo "character", y esta va a acorde con ella; en cambio, en el caso de "Median age",los datos deben de ser numéricos pero no lo son pues sus datos están entre comillas. 
+
+Ejercicio 2:
+
+Veamos de nuevo nuestra data:
+```{r}
+dataCIA= htmltab(doc =link,
+               which =linkPath)
+```
+El mensaje "defaulting to UTF-8" nos indica que algo está mal con nuestra tabla, por ende,  debemos de fijarnos qué hay por limpiar.
+```{r}
+head(dataedad)
+```
+Podemos ver que en la columna "Median age" y Country presentan errores. La primera tiene información mezclada en una sola celda, mientras que en la segunda, enocntramos espacios en balnco entre la escritura de los países.
+
+
+
+El ejercicio nos pide crear una columna:
+```{r}
+
+library(stringr)
+#primero fijarnos de que es lo que queremos
+str_split(string = dataedad$`Median age`,
+         pattern = ':',
+         simplify = T)
+#creamos una columa extra llamada promedio
+dataedad$promedio=str_split(string = dataedad$`Median age`,
+         pattern = ':',
+         simplify = T) [,2]
+head(dataedad$promedio)
+
+#
+```
+
+Solo quiero quedarme con los dígitos, por ende hago lo siguiente:
+```{r}
+dataedad$promedio=str_split(string = dataedad$promedio,
+         pattern = " ",
+         simplify = T)[,1]
+
+#veamos nuestra data ya editada:
+head(dataedad)
+```
+Ya teine una columna etiquetada promedio, pero debemos de ver si es numérica o no
+```{r}
+str(dataedad$promedio)
+```
+Al aparecer entre comillas, decimos que no es numérica, es un objeto character. Por ende, debemos de converitrlo nosotros mismos:
+```{r}
+dataedad$promedio = as.numeric(dataedad$promedio)
+str(dataedad$promedio)
+```
+Y efectivamente, nuestra variable ya es numérica.
+
+
+PREGUNTA 3:
+
+```{r}
+summary(dataedad$promedio)
+```
+Usando el comando Summary, decimos que el valor minimo de esa varibale es 14.80 y el máximo es 55.40. Asimismo, el promedio de "dataedad$promedio" es 31.55 
+
+
+
+
+
+
+
+
+
+

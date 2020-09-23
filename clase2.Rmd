@@ -1,0 +1,52 @@
+---
+title: "Clase práctica 2"
+Fecha: 18/09/20
+output: html_notebook
+---
+Abriendo la data y le ponemos un nombre:
+```{r}
+library(rio)
+data=import("data.csv")
+```
+
+cambiamos el nombre de la columna 2:
+```{r}
+names(data)[2]='labor'
+```
+
+Hacerle un corte sguiendo patrones:
+```{r}
+library(stringr)
+str_split(string = data$labor,
+         pattern = ':',
+         simplify = T) #hemos visto la data dividida por los :, y si lo dividio así me salen 4 particiones. Veo que lo que me interesa está en la columna 2
+
+#crear columna y que sea igual a una participacion 2
+data$agricultura= str_split(string = data$labor,
+         pattern = ':',
+         simplify = T)[,2]
+```
+Solo quiero quedarme con los digitos: crea una nuev acolumna que sea igual a la participacionnde determinada columna y que se quede con mi primera parte
+```{r}
+data$agricultura2=str_split(string = data$agricultura,
+         pattern = '%',
+         simplify = T)[,1]
+
+#veamos el tipo de variable de la columna nueva
+str(data$agricultura2)
+data$agricultura2 = as.numeric(data$agricultura2)
+
+#hacemos histograma:
+hist(data$agricultura2)
+```
+
+Para exportar la data:
+```{r}
+
+export(data,"datafinal.csv")
+
+```
+
+
+
+

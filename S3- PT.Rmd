@@ -66,7 +66,7 @@ Key=Country
 corrgdp=merge(corru,gdp,by.x='Country', by.y='Country') #x es data frame derecha y "y", a la izquirda
 corrgdpdemo=merge(corrgdp,democ)
 ```
-Preguntar por que dice que no es necesario el KEY en el chunk anterior, .1! Si tienen igual nombre hacemos el segundo comando.
+Preguntar por que dice que no es necesario el KEY en el chunk anterior, .1!
 
 Resultado:
 ```{r}
@@ -88,7 +88,7 @@ Key en texto (chr)!! pero hay scores que debemos cambiarlo de tipo (num, nom, or
 A numérico:
 lapply→ aplicar la función a CONJUNTO de columnas
 ```{r}
-corrgdpdemo[,c(2:6)]=lapply(corrgdpdemo[,c(2:6)],as.numeric)    #esta forma solo con numeros, no con nombres
+corrgdpdemo[,c(2:6)]=lapply(corrgdpdemo[,c(2:6)],as.numeric)
 ```
 No hay NA'S por ende no hay problemas de limpieza!
 

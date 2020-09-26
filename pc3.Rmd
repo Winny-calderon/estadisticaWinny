@@ -1,0 +1,105 @@
+---
+title: "PC3"
+Alumna: Calderon Alor Winny
+output: html_notebook
+---
+Abrimos la base de datos y hacemos scraping:
+```{r}
+link1 = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/223.html" 
+link2 ="https://www.cia.gov/library/publications/resources/the-world-factbook/fields/225.html"
+
+library(htmltab)
+
+income = htmltab(doc = link1, 
+               which ='//*[@id="fieldListing"]',
+               encoding = "UTF-8") 
+taxes1 = htmltab(doc = link2, 
+               which ='//*[@id="fieldListing"]',
+               encoding = "UTF-8") 
+```
+Empezaremos con income:
+a. cambiar nombre:
+```{r}
+names(income)
+names(income) = c("Country", "Distribution")
+summary(income)
+```
+b valores perdidos:
+```{r}
+income[!complete.cases(income),]
+```
+
+Hay cero valores perdidos.
+
+c. Limpieza de bases:
+```{r}
+income$Distribution = parse_number(income$Distribution)
+```
+
+d. Conversion a numerica:
+```{r}
+str(income)
+summary(income)
+```
+
+Distribution debe de ser numérica y lo es. No hay conversión.
+
+#SEGUNDA DATA:
+
+A. CAMBIO DE NOMBRE:
+```{r}
+names(taxes1)
+names(taxes1) = c("Country", "Taxes")
+summary(taxes1)
+```
+
+B. VALORES PERDIDOS:
+```{r}
+taxes1[!complete.cases(taxes1),]
+```
+Hay cero valores perdidos.
+
+C. LIMPIEZA:
+```{r}
+library(stringr)
+str_split(string = taxes1$taxes,
+         pattern = '%',
+         simplify = T)
+taxes1$taxes= str_split(string = taxes1$taxes,
+         pattern = '%',
+         simplify = T)[,1]
+taxes1$Taxes=NULL
+```
+
+D. CONVERSION A NUMÉRICA:
+```{r}
+str(taxes1) #convertir taxes a numerica
+taxes1$Taxes = as.numeric(taxes1$taxes)
+```
+txes ya está en numerica
+
+3. JUNTANDO BASES:
+
+```{r}
+base_final=merge(income,taxes1,by.x='Country', by.y='Country') 
+```
+
+4. GRAFICO E INTERPRETACION:
+```{r}
+plot(Distribution,taxes)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

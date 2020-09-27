@@ -1,0 +1,121 @@
+---
+title: "Limpieza de data"
+output: html_notebook
+---
+
+Limparemos la data a usar. Debemos obtener los paises con la variable "Total unemployment rate - women" y "Women with account at financial institution or with mobile moneyservice provide".
+
+Empecemos con importando las bases de datos:
+
+```{r}
+library(rio)
+link1= "https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_3.xlsx"
+data_woman=import(link1)
+names(data_woman)
+
+link2="https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_2.xlsx"
+gender_gap=import(link2)
+```
+
+##PRIMERA VARIABLE:
+Ahora eliminaremos las columnas y filas que no nos sirven:
+```{r}
+#columnas
+gender_gap=gender_gap[,-c(1, 3:10)]
+gender_gap=gender_gap[,-c(2:5)]
+gender_gap=gender_gap[,-c(3:13)]
+
+#filas:
+gender_gap=gender_gap[-c(1:14, 77, 132, 170, 207, 214:272),]
+
+
+```
+
+Ahora, cambiaremos de nombre a nuestras variables:
+```{r}
+names(gender_gap) = c("Country", "Unemployment")
+
+```
+
+Veamos la naturalez de las variables:
+```{r}
+str(gender_gap)
+#La tasa de desempleo está en caracter, debemos convertirla a numérica
+gender_gap$Unemployment = as.numeric(gender_gap$Unemployment)
+```
+
+
+#Segunda varibale: "Women with account at financial institution or with mobile moneyservice provide"
+
+Siguiendo el mismo procedimiento, vemos que columnas y filas no nos sirven y las eliminamos. 
+```{r}
+#eliminamos columnas
+data_woman=data_woman[,-c(1, 3:24, 26:28)]
+
+#eliminamos filas
+data_woman=data_woman[-c(1:12, 75, 130, 168, 205, 212:267),]
+```
+
+Desupues, cambiamos los nombres
+```{r}
+names(data_woman) = c("Country", "Account")
+```
+
+Finalmente, veamos la naturaleza de cada variable:
+```{r}
+str(data_woman) 
+
+#Account aparece como caracter, por ende, debemos convertirla a numerica
+data_woman$Account = as.numeric(data_woman$Account)
+```
+
+
+
+#JUNTAREMOS LAS VARIABLES EN UN MISMO CUADRO:
+
+Para juntar la data, usaremos el comando "merge":
+```{r}
+names(gender_gap)
+names(data_woman)
+#entonces le pedimos que nos fusione las datas en base a la variable común: Country
+gender_data=merge(gender_gap,data_woman,by.x='Country', by.y='Country') 
+head(gender_data)
+```
+Sin embargo, aplicaremos el comando que nos mostrará los paises en total:
+```{r}
+gender_data2=merge(gender_gap,data_woman,all.x=T,all.y=T)
+```
+
+Podemos notar que todos los casos de países conicide, es decir, no hay ningún pain mas ni menos en las dos datas usadas.
+
+Fijaremos si hay duplicados:
+```{r}
+gender_data[duplicated(gender_data$Country),]
+```
+No hay ninguna columna duplicada
+
+
+
+#Ahora que ambas están juntas, procederemos a editarle los nombres a los paises. Esto para que nuestra data sea mas limpia y ordenada.
+
+Cambiamos nombres
+```{r}
+gender_data[gender_data$Country=='Bolivia (Plurinational State of)',"Country"]="Bolivia, Plurinational State of"
+gender_data[gender_data$Country=='Congo (Democratic Republic of the)',"Country"]="Congo, Democratic Republic of the"
+gender_data[gender_data$Country=='Eswatini (Kingdom of)',"Country"]="Eswatini, Kingdom of"
+gender_data[gender_data$Country=='Hong Kong, China (SAR)',"Country"]="Hong Kong, China"
+gender_data[gender_data$Country=='Iran (Islamic Republic of)',"Country"]="Iran, Islamic Republic of"
+gender_data[gender_data$Country=='Korea (Republic of)',"Country"]="Korea, Republic of"
+gender_data[gender_data$Country=='Micronesia (Federated States of)',"Country"]="Micronesia, Federated States of"
+gender_data[gender_data$Country=='Moldova (Republic of)',"Country"]="Moldova, Republic of"
+gender_data[gender_data$Country=='Tanzania (United Republic of)',"Country"]="Tanzania, United Republic of"
+gender_data[gender_data$Country=='Venezuela (Bolivarian Republic of)',"Country"]="Venezuela, Bolivarian Republic of"
+
+
+gender_data[gender_data$Country=='Korea (Democratic People's Rep. of)',"Country"]="Korea, Democratic People's Rep. of"
+
+
+```
+
+
+

@@ -1,0 +1,304 @@
+---
+title: "Sesion 4"
+output: html_notebook
+---
+CONGLOMERADOS - MÉTODO PARTICIONANTE
+
+PAQUETES
+```{r}
+library(rio)
+library(cluster)
+library(plyr) # para funcion "each"
+library(psych) #para hacer tablas comparadas
+library(knitr) #para generar tablas html
+library(kableExtra) #para generar tablas html
+library(factoextra) #visualización de clusters
+library(ggrepel) #para que las etiquetas de los graficos no se superpongan
+library(htmltab)
+library(dplyr)
+```
+Analisis cluster: 
+## Ejercicio 1: Agrupar los departamentos según cobertura de servicios públicos básicos (agua, desague, electrificación)
+
+En la siguiente base de datos tenemos los departamentos del Perú (excepto Lima y Callao) con el siguiente conjunto de variables. 
+
+```{r}
+data <- import("https://github.com/DataPolitica/salidas/raw/master/Data/regiones.xlsx")
+str(data)
+summary(data)
+#Lo ideal sería hacer un analisis uni y bivariado: Primero conocemos nuestras variables para luego agruparlas, aconglomerado.
+```
+Lo ideal sería hacer primero un análisis univariado (funcion: summary ---> min, max, median), descriptivos
+Debemos darnos cuenta qué variables vamos a agregar --- > debo analizar la estructura
+
+### Paso 1: Asignar nombre a filas y seleccionar sólo aquellos casos sin NA´s en las variables de nuestro interés
+
+Asignemos un  nombre a cada fila (al igual que le ponemos nombre a las columnas). Esto nos ayudará más adelante durante la elaboración de los gráficos.
+
+Para dar nombre a las variables de las filas. 
+```{r}
+View(data) #Configrar el nombre de as regiones en filas:
+row.names(data)=data$region
+View(data) #ELIMINAR LA SIGUIENTE:
+data = data[,-1]
+```
+Se sugiere que se trabajar sin valores perdidos. O hacer un "subset" con esas variables a usar. 
+
+### Paso 2: Calcular la distancia entre los conglomerados
+Generar centroides y calcular la distancia de lso casos con este centroide.
+
+Para hacer el cálculo de la distancia utilizaremos 3 variables: agua, desague y electrificación. 
+
+```{r}
+head(data)[, c(3:5)]  #solo nos muestra las variables que hemos seleccionado, agregarlas al caluclo para agrupar los casos.
+dist = daisy(data[,c(3:5)], metric = "gower") 
+#daisy --> distancia ; columnas, metric = "gower" (SIEMRE SE USA)
+# seleccionamos las columnas de insumo
+# usamos metric="gower" para estandarizar cada variable. Importante. 
+```
+
+### Paso 3: Crear los conglomerados
+
+Proponemos agrupar a los distritos en 2 grupos según su nivel de cobertura de servicios públicos básicos (agua, desague y electrificación) METODO:  NO JERARQUICO PARTICIONANTE
+
+```{r}
+grupos = pam(dist, 4, cluster.only = T) #Le decimos que cree dos grupos o cluster
+data$grupos = grupos #crear columna
+#se podría usar cluster.only = F (sino todo un paquete con toda la información); cluster.only = T (solo cluster)
+```
+
+Utilizó las tres variables para hacer los grupos. 
+Tacna está en el grupo 2 porque se diferencia del grupo 1 y porque también hay otros casos en el grupo 2 que se parecen.
+### Paso 4: Analizar descriptivamente cada grupo
+
+Podemos hacer la comparación de cualquier variable entre los grupos haciendo uso del comando describeBy():
+
+```{r}
+#Opcional, para recordar las clases de Estadísitca I
+# Veamos los descriptivos de la variable "Agua" (columna N° 4) entre los grupos
+describeBy(data$agua, group=data$grupos, digits = 2)
+#va a describir agua entre los grupos 1 y 2. El prmedio de agua del grupo 1 tiene 53 y del grupo 2, 72. Pues el 2do tiene una media más alta.
+
+# Veamos los descriptivos de la variable "Desague" (columna N° 5) entre los grupos
+describeBy(data$desague, group=data$grupos, digits = 2)
+
+# Veamos los descriptivos de la variable "Electrificacion" (columna N° 6) entre los grupos
+describeBy(data$electrificacion, group=data$grupos, digits = 2)
+#Interesante: el promedio de electricidad no varía mucho entre ambos grupos
+
+#DESCRIPTIVOS DE LA VARIABLE POBREZA: 
+  describeBy(data$pobreza, group=data$grupos, digits = 2)
+  #se puede ver que en el grupo 1, la pobreza es más fuerte que en el grupo 2, la pobreza es más leve. 
+  #El grupo 2 está mejor que el grupo 1 respecto a las variables analizadas. 
+```
+
+Si deseamos podemos solicitar dichos resultados al mismo tiempo:
+
+```{r}
+describeBy(as.matrix(cbind(data[,c(4:6)])), group=data$grupos, digits = 2)
+#as matrix nos permite ahorrar tiempo y agrupar todas las variables de una
+```
+Que nos muestre los descrptivos por grupos, pero de un conjunto de columnas: desague, elet y esper. Esta es prefereible por tiempo.
+
+También usar aggregate() para crear una nueva base que sean los resultados: Aggregate sirve para simplicar la info que tenemos en una base de datos de acuerdo a grupos que hemos identidificado.Creamos un nuevo objeto
+```{r}
+aggregate(as.matrix(cbind(data[,c(3:5)]))~ grupos, data=data, mean)
+#agreggate: tomar de referencia un nivel de una variable y con todos los casos que cumplan esos niveles va a hacer una operación matemática 
+
+#Guardamos la visualización en un data.frame
+tabla = aggregate(as.matrix(cbind(data[,c(3:5)]))~ grupos, data=data, mean)
+
+#para transponer (que las columnas sean filas y las filas sean columnas):
+tabla = t(as.data.frame(tabla))
+tabla
+#Para mostrar los promedios de sus variables de insumo por GRUPOS. 
+```
+
+Podemos guardar en formato amigable y generar una tabla
+```{r}
+#otra forma de generar la tabla: 
+tablahtml = kable(tabla, format = "html", digits = 2) 
+
+kable_styling(tablahtml) #para ver cómo queda la tabla (estilo)
+
+#Para ponerlo con findo negro y verlo:
+kable_material_dark(tablahtml)
+```
+
+
+### Paso 5: Visualización de grupos en un gráfico
+
+También podemos visualizar el agrupamiento de los departamentos.
+
+Podemos cambiar el nombre de los grupos de acuerdo a lo que hemos visto en la parte descriptiva:
+
+```{r}
+data$grupos = as.factor(data$grupos)
+str(data$grupos)
+levels(data$grupos) = c("Baja cobertura", "Alta cobertura")
+table(data$grupos)
+```
+
+
+Generamos nuestro primer gráfico
+
+```{r}
+fviz_cluster(object = list(data=dist, cluster = data$grupos),
+             geom = c("text"), 
+             ellipse.type = "convex")
+
+#fviz:cluster= Visualizar los resultados de la clusterizacion
+#Variables creados por el propio sist de cluster que representar mjeor las categorías de insumo usadas: Dim 1 y Dim2: cateogorías resumen. COn eje x y eje y, vemos que los grupos estan distanciados. Hay una distnacia cosiderable entre ambos grupos, en terminos espaciales. Eje x y y son categ resumen de nuestras variables usadas en dos dimensiones.
+
+#las observaciones son distribuidas, utilizando componentes principaels (categoráis resumen de todas las columnas que hemos ingresado. Hay formas de generar variables que se parezcan a nuestras columnas de insumo. Este gráfico lo que genera son categorías resumen de lo que hemos utilizado en dos dimensiones.)
+```
+Con este grafico solo conviene decir si estan alejados o cerca.
+Sobre el gráfico: DIM1 Y DIM2 ---> son variables que ha creado la pc, que representan mejor las categorías que he creado. Genere categorías resumen de estas variables que has generado. Vemos dos ejes y los grupos están distanciados. 
+Se nos va a pedir que veamos los grupos y qué tan lejos están. Se puede ver que hay una distancia considerable entre los 2 GRUPOS. Graficar los grpos en base de 2 variables resumen. 
+1ro: DISTANCIA
+Mejoramos el gráfico:
+
+INTERPRETACIPION. en el gurpo de baja cobertura hay muchas regiones y en el otro hay menos. Hay una distancia considerable entre ambos. 
+
+```{r}
+fviz_cluster(object = list(data=dist, cluster = data$grupos),
+             geom = c("text"), 
+             ellipse = FALSE, labelsize = 10,
+             repel = T)
+# Decimos que elimine el elipse, cambiamos el nombre de la etiqueta y decimos que no se superpongan las etiquetas. 
+```
+Tener cuidado con las fronteras
+
+
+##Ejercicio 2
+Nos piden que agrupemos a los distritos del Perú en función de su sistema político. Para eso, nos valeremos de algunos indicadores como:
+NEP:                    Número efectivo de partidos
+NP:                     Número de partidos
+Hiperfraccionamiento:   Indicador de hiperfraccionamiento
+Volatilidad total:      Indicador de volatilidad electoral
+Concentracción:         Indicador de concentración
+Herfindal Hirschman:    Indicador de concentración de Herfindal-hirchman
+Competitividad:         Indicador de competitividad
+
+```{r}
+sispol <- import("https://github.com/JairAlva/Estadistica-II/raw/master/Clase%204/ERM2010_ISP_Distrital.xlsx")
+str(sispol)
+summary(sispol)
+```
+
+Calculamos la distancia entre cada unidad de análisis
+```{r}
+dist = daisy(sispol[,c(5:11)], metric = "gower")
+
+```
+
+Proponemos agrupar a los distritos en 4 grupos
+```{r}
+grupos = pam(dist, 4, cluster.only = T)
+grupos$clustering
+
+sispol$clusterP = grupos
+
+```
+
+Podemos explorar los resultados
+```{r}
+#Opcional, para recordar las clases de Estadísitca I
+describeBy(as.matrix(cbind(sispol[,c(5:11)])), group=sispol$clusterP, digits = 2)
+
+
+aggregate(as.matrix(cbind(sispol[,c(5:11)]))~ clusterP, data=sispol,
+          FUN=each(MD = median, Media = mean))
+
+#Guardamos la visualización en un data.frame
+tabla = aggregate(as.matrix(cbind(sispol[,c(5:11)]))~ clusterP, data=sispol,
+          FUN=each(MD = median, Media = mean))
+
+tabla = t(as.data.frame(tabla))
+tabla
+```
+Podemos guardar en formato amigable
+```{r}
+tablahtml = kable(tabla, format = "html", digits = 2) 
+
+kable_styling(tablahtml)
+```
+
+También podemos visualizar el agrupamiento de los distritos
+```{r}
+fviz_cluster(object = list(data=dist, cluster = sispol$clusterP),
+             geom = c("text"), 
+             ellipse.type = "convex")
+```
+Problema con outliers. 
+Para eso separamos los grupos.
+Mejorar el gráfico
+```{r}
+fviz_cluster(object = list(data=dist, cluster = sispol$clusterP),
+             geom = c("text"), 
+             ellipse = FALSE,labelsize = 5)
+```
+
+##Ejercicio 3
+Ahora hablaremos sobre la tolerancia política en el Perú. Nos interesa explorar especificamente la tolerancia política en el Perú
+```{r}
+cultura = import("https://github.com/JairAlva/Estadistica-II/raw/master/Clase%204/Peru2019.dta")
+
+cultura = select(cultura, d1, d2, d3, d4)
+str(cultura)
+
+cultura[,] = lapply(cultura[,], as.numeric)
+
+cultura[!complete.cases(cultura),]
+
+cultura = cultura[complete.cases(cultura),]
+```
+
+Calculamos la distancia entre cada unidad de análisis
+```{r}
+distA = daisy(cultura, metric = "gower")
+
+```
+
+Proponemos una cantidad "n" de grupos a formar
+```{r}
+gruposA = pam(distA, 2, cluster.only = T)
+
+cultura$clusterP = gruposA
+```
+
+Podemos explorar los resultados
+```{r}
+#Opcional, para recordar las clases de Estadísitca I
+describeBy(as.matrix(cbind(cultura[,c(1:4)])), group=cultura$clusterP, digits = 2)
+
+
+aggregate(as.matrix(cbind(cultura[,c(1:4)]))~ clusterP, data=cultura,
+          FUN=plyr::each(MD = median, Media = mean))
+
+#Guardamos la visualización en un data.frame
+tablaA = aggregate(as.matrix(cbind(cultura[,c(1:4)]))~ clusterP, data=cultura,
+          FUN=plyr::each(MD = median, Media = mean))
+
+tablaA = t(as.data.frame(tablaA))
+tablaA
+```
+Podemos guardar en formato amigable
+```{r}
+tablahtml = kable(tablaA, format = "html", digits = 2) 
+kable_styling(tablahtml)
+```
+
+También podemos visualizar el agrupamiento de los distritos
+```{r}
+fviz_cluster(object = list(data=distA, cluster = cultura$clusterP),
+             geom = c("point"), 
+             ellipse.type = "convex")
+```
+
+Mejorar el gráfico
+```{r}
+fviz_cluster(object = list(data=distA, cluster = cultura$clusterP),
+             geom = c("text"), 
+             ellipse = FALSE,labelsize = 5)
+```

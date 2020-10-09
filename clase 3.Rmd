@@ -1,0 +1,123 @@
+---
+title: "Analisis de conglomerados: estrategia de particion"
+output: html_notebook
+---
+1. Llamar a la data
+```{r}
+# coleccion
+library(htmltab)
+demolink = "https://en.wikipedia.org/wiki/Democracy_Index"
+demopath = '//*[@id="mw-content-text"]/div/table[2]/tbody'
+demo<- htmltab(doc = demolink, which =demopath)
+
+```
+
+2. Limpieza
+```{r}
+library(stringr)
+library(magrittr)
+names(demo)=str_split(names(demo),">>",simplify = T)[,1]%>%gsub('\\s','',.)
+demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], trimws,whitespace = "[\\h\\v]") # no blanks
+```
+
+3. Preparación
+```{r}
+demo$Country=trimws(demo$Country,whitespace = "[\\h\\v]")
+demo=demo[,-c(1)] #sin Rank
+demo[,-c(1,8,9,10)]=lapply(demo[,-c(1,8,9,10)], as.numeric) # a numerico
+demo=demo[,-c(10)]
+
+```
+
+```{r}
+str(demo)
+```
+
+4. Paso previos al cluster
+```{r}
+row.names(demo)=demo$Country  #Los nombres de cada caso aparezcan en las gráficas
+```
++Solo son Casos completos, o sea no valores perdidos
+```{r}
+# alternativa a complete.cases:
+demo=na.omit(demo)
+```
+
+###ESTRATEGIA DE PARTICIÓN###
+
+1. Calcular distancia
+```{r}
+library(cluster)
+
+# usar en C() las dimensiones de interes:
+g.dist = daisy(demo[,c(3:7)], metric="gower")
+```
+2. Proponer cantidad de clusters
+```{r}
+pam.resultado=pam(g.dist,4,cluster.only = F)
+
+demo$clusterPT=pam.resultado$cluster
+```
+
+3, Explorar el resultado
+```{r}
+library(plyr) # para funcion "each"..
+
+# nota el uso de as.matrix con cbind:
+aggregate(as.matrix(cbind(demo[,c(3:7)]))~ clusterPT, data=demo,
+          FUN=plyr::each(MD = median, Media = mean))
+```
+
+```{r}
+# guardando resultado anterior en objeto "agg": 
+agg=aggregate(as.matrix(cbind(demo[,c(3:7)]))~ clusterPT, 
+              data=demo, # luego las funciones que deseas
+              FUN=plyr::each(MD = median, Media = mean))
+
+# convertir en data frame, y 
+tablaResumen=t(as.data.frame(agg))
+tablaResumen
+```
+mejor presentación la funcion kable():
+```{r}
+library(knitr)
+library(kableExtra)
+kable(tablaResumen, format = "html", digits = 2)%>%
+  kable_styling()
+```
+4. Comparar
+```{r}
+table(demo$clusterPT,demo$Regimetype,dnn = c('clusterPT','TipoEconomist'))
+```
+Democracias plenas
+```{r}
+demo[demo$clusterPT==1 & demo$Regimetype=="Flawed democracy",'Country']
+```
+
+5. Visualizar
+```{r}
+library(factoextra)
+```
+
+```{r}
+fviz_cluster(object = list(data=g.dist, cluster = demo$clusterPT),
+             geom = c("text"), 
+             ellipse.type = "convex")
+```
+
+```{r}
+library(ggrepel)
+
+fviz_cluster(object = list(data=g.dist, cluster = demo$clusterPT),
+             geom = c("text"), 
+             ellipse = FALSE,labelsize = 5,
+             repel = T)
+```
+
+
+
+
+
+
+
+

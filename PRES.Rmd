@@ -12,13 +12,14 @@ Empecemos importando las bases de datos obtenidas:
 library(rio)
 
 #Variable: "Total unemployment rate - women"
-link2="https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_2.xlsx"
+
+link2="https://github.com/Winny-calderon/Proyecto-EAP2/raw/master/hdro_statistical_data_dashboard_2.xlsx"
 gender_gap=import(link2)
 names(gender_gap)
 
 
 #Variable: "Women with account at financial institution or with mobile moneyservice provide"
-link1= "https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_3.xlsx"
+link1= "https://github.com/Winny-calderon/Proyecto-EAP2/raw/master/hdro_statistical_data_dashboard_3.xlsx"
 data_woman=import(link1)
 names(data_woman)
 
@@ -48,7 +49,7 @@ names(gender_gap) = c("Country", "Unemployment")
 Asimismo, veamos la naturaleza de nuestras variables:
 ```{r}
 str(gender_gap)
-#"Country" es categorica, entonces no hay que corregir
+#En el caso de "Country" no hay que corregir
 #La tasa de desempleo está en caracter, debemos convertirla a numérica
 gender_gap$Unemployment = as.numeric(gender_gap$Unemployment)
 ```
@@ -115,7 +116,7 @@ No hay ninguna columna duplicada.
 Cambiamos los nombres:
 ```{r}
 #Bolivia (Plurinational State of)
-gender_data[gender_data$Country=='Bolivia (Plurinational State of)',"Country"]="Bolivia, Plurinational State of"
+gender_data[gender_data$Country=='Bolivia (Plurinational State of)',"Country"]="Bolivia"
 #Congo (Democratic Republic of the)
 gender_data[gender_data$Country=='Congo (Democratic Republic of the)',"Country"]="Congo, Democratic Republic of the"
 #Eswatini (Kingdom of)
@@ -140,6 +141,6 @@ gender_data[gender_data$Country=='Venezuela (Bolivarian Republic of)',"Country"]
 
 Por último, solo queda exportar, a nuestro Github, nuestra base.
 ```{r}
-export(gender_data, "genderData.csv")
+export(gender_data, "GenderData.csv")
 ```
 

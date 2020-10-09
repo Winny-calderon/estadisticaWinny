@@ -231,4 +231,3 @@ aggregate(cbind(todaSemana, NoTodaSemana) ~ Provincia + Departamento,
 
 
 
-

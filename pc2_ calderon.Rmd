@@ -87,4 +87,3 @@ Usando el comando Summary, decimos que el valor minimo de esa varibale es 14.80 
 
 
 
-

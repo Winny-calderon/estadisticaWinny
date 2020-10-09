@@ -39,7 +39,7 @@ row.names(demo)=demo$Country  #Los nombres de cada caso aparezcan en las gráfic
 ```
 +Solo son Casos completos, o sea no valores perdidos
 ```{r}
-# alternativa a complete.cases:
+# alternativa a complete.cases: quitar NA's
 demo=na.omit(demo)
 ```
 
@@ -49,7 +49,7 @@ demo=na.omit(demo)
 ```{r}
 library(cluster)
 
-# usar en C() las dimensiones de interes:
+# usar en C() las dimensiones de interes: #GOWER: TODAS LAS CONVINACINES POSIBLES.
 g.dist = daisy(demo[,c(3:7)], metric="gower")
 ```
 2. Proponer cantidad de clusters

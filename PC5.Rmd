@@ -1,0 +1,176 @@
+---
+title: "PC5"
+"winny calderon"
+output: html_notebook
+---
+
+```{r}
+library(stringr)
+library(magrittr)
+library(htmltab)
+library(factoextra)
+library(cluster)
+library(ggrepel)
+library(foreign)
+```
+
+
+
+```{r}
+link="https://en.wikipedia.org/wiki/World_Happiness_Report"
+linkPath='//*[@id="mw-content-text"]/div[1]/table'
+
+library(htmltab)
+data= htmltab(doc =link,
+               which =linkPath)
+#Para saber cuántas observaciones y variables tiene nuestra abse de datos, usamos str:
+str(data)
+class(data)
+```
+
+LIMPIEZA DE BASE:
+```{r}
+#eliminamos columnas:
+data$`Overall rank`=NULL
+data$Score=NULL
+#Nombres mas sencillos
+names(data)=c("Country","GDP","Support","Healthy","Freedom", "Generosity", "Perceptions")
+
+#editando los nombres de Country:
+data$Country=gsub('Â',"",data$Country)
+
+#Espacios en blanco:
+names(data)
+str(data$Country)
+data$Country= gsub('Â',"",data$Country)
+data$Country=lapply(data$Country, trimws,whitespace = "[\\h\\v]")
+
+#a numericas
+str(data)
+data[,-c(1)]=lapply(data[,-c(1)], as.numeric)
+str(data$Perceptions)
+
+#valores perdidos
+data=na.omit(data)
+
+row.names(data)=data$Country
+data$Country=NULL
+```
+
+
+2. RECOMENDACIÓN DE CLUSTERS:
+```{r}
+subdata<-data
+subdata<-na.omit(subdata)
+
+```
+
+```{r}
+#CALCULAMOS LAS DISTANCIAS CON DAYSY
+g.dist = daisy(subdata, metric="gower")
+
+#NÚMERO DE CLUSTER PARA PARTICIÓN- pamm
+fviz_nbclust(subdata, pam,diss=g.dist,method = "gap_stat",k.max = 10,verbose = F)
+
+```
+ RPTA: para el cluster particionante me recomienda 7
+```{r}
+#Número de clusters para jerarquización (colocamos hcut)
+fviz_nbclust(subdata, hcut,diss=g.dist,method = "gap_stat",k.max = 10,verbose = F)
+```
+RPTA: Para el caso de los jerarquicos, me recomienda 5 clusters
+
+GRAFICOS DE SILUETAS:
+```{r}
+particion = pam(g.dist,7,cluster.only = F) #Indicamos 3 por el resultado de particion
+aglomerativo = hcut(g.dist, k = 5,hc_func='agnes',hc_method = "ward.D") #Indicamos 5 poR el resultado de jerarquizacion
+divisivo = hcut(g.dist, k = 5,hc_func='diana')
+```
+
+Con esto ya podemos calcular los gráficos de siluetas:
+```{r}
+#PARTICION
+fviz_silhouette(particion)
+```
+
+```{r}
+#AGLOMERATIVO:
+fviz_silhouette(aglomerativo)
+```
+
+```{r}
+#DIVISIVO:
+fviz_silhouette(divisivo)
+```
+
+RPTA: la mas indicada es "diana" porque tiene el "Average silhouette width" más alto de entre las tres, es 0.24. Además, es la que con menos barras negativas cuenta; es decir, es la que menos casos con width negativos tiene.
+
+3. cluster de densidad:
+
+Calcular el mapa de posiciones:
+```{r}
+#Generar el escalamiento usando las distancias calculadas---g.dist
+proyeccion = cmdscale(g.dist, k=2,add = T) 
+#Creamos una nueva columna, que será la primera dimensión en la data en la que estamos trabajando 
+subdata$dim1 <- proyeccion$points[,1]
+#Creamos una nueva columna, que será la segundaa dimensión en la data en la que estamos trabajando
+subdata$dim2 <- proyeccion$points[,2]
+```
+
+GRAFICAR DIMENSIONES:
+```{r}
+base= ggplot(subdata,aes(x=dim1, y=dim2,label=row.names(subdata))) 
+base + geom_text(size=2)
+
+```
+
+```{r}
+#Coloreando el mapa
+
+#CREAR 1ERO LAS COLUMNAS 
+subdata$c.particion=as.factor(particion$clustering)
+subdata$c.aglomerativo=as.factor(aglomerativo$cluster)
+subdata$c.divisivo=as.factor(divisivo$cluster)
+
+#ESTIMAR LÍMITES
+
+min(subdata[,c('dim1','dim2')]); max(subdata[,c('dim1','dim2')])
+
+```
+RPTA: El valor mínimo del límite es -0.52 y el valor máximo del límite es 0.54.
+
+```{r}
+#GRAFICAS PARA PAM AGNES Y DIANA
+limites=c(-0.52,0.54) 
+
+base= ggplot(subdata,aes(x=dim1, y=dim2)) + ylim(limites) + xlim(limites) + coord_fixed()
+
+base + geom_point(size=2, aes(color=c.particion))  + labs(title = "PARTICIONANTE") 
+base + geom_point(size=2, aes(color=c.aglomerativo)) + labs(title = "AGLOMERATIVO")
+base + geom_point(size=2, aes(color=c.divisivo)) + labs(title = "DIVISIVO")
+```
+
+AHORA AGRUPAMOS POR DENSIDAD:
+```{r}
+#Debemos de calcular las nuevas distancias (euclideandas) 
+g.dist.cmd = daisy(subdata[,c('dim1','dim2')], metric = 'euclidean')
+
+#Generamos la agrupación de densidad 
+library(fpc)
+db.cmd = dbscan(g.dist.cmd, eps=0.15, MinPts=6, method = 'dist') #eps y Minpts son rellenados con los datos que se nos han otorgado
+db.cmd
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+

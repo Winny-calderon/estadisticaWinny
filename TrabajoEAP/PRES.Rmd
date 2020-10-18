@@ -4,18 +4,17 @@ Alumna: Winny Calderón Alor
 output: html_notebook
 ---
 
-Limparemos la data a usar. Para esto debemos de obtener las variables "Total unemployment rate - women" y "Women with account at financial institution or with mobile moneyservice provide".Para esto, debemos tener en cuenta que nuestra unidad de analisis son los paises, asi que este tambien estará presente en nuestra limpieza,
+Limparemos la data a usar. Para esto debemos de obtener las variables "Total unemployment rate - women" y "Women with account at financial institution or with mobile moneyservice provide".Para esto, debemos tener en cuenta que nuestra unidad de analisis son los paises, asi que este tambien estará presente en nuestra limpieza...
 
 Empecemos importando las bases de datos obtenidas:
-
 ```{r}
+
 library(rio)
 
 #Variable: "Total unemployment rate - women"
 link2="https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_2.xlsx"
 gender_gap=import(link2)
 names(gender_gap)
-
 
 #Variable: "Women with account at financial institution or with mobile moneyservice provide"
 link1= "https://github.com/Winny-calderon/estadisticaWinny/raw/master/hdro_statistical_data_dashboard_3.xlsx"
@@ -24,11 +23,10 @@ names(data_woman)
 
 ```
 
-
-
 ##PRIMERA VARIABLE:
 Empecemos eliminando las columnas y filas que no nos son de utilidad:
 ```{r}
+
 #columnas
 gender_gap=gender_gap[,-c(1, 3:10)]
 gender_gap=gender_gap[,-c(2:5)]
@@ -41,50 +39,55 @@ gender_gap=gender_gap[-c(1:14, 77, 132, 170, 207, 214:272),]
 
 Como una de nuetras columnas presenta un nombre muy largo, por temas de practicidad, cambiaremos sus nombres a unos mas sencillos:
 ```{r}
+
 names(gender_gap) = c("Country", "Unemployment")
 
 ```
 
 Asimismo, veamos la naturaleza de nuestras variables:
 ```{r}
+
 str(gender_gap)
 #"Country" es categorica, entonces no hay que corregir
 #La tasa de desempleo está en caracter, debemos convertirla a numérica
 gender_gap$Unemployment = as.numeric(gender_gap$Unemployment)
+
 ```
-
-
 
 ##Segunda variable: "Women with account at financial institution or with mobile moneyservice provide"
 
 Siguiendo el mismo procedimiento, vemos que columnas y filas no nos sirven y las eliminamos. 
 ```{r}
+
 #eliminamos columnas
 data_woman=data_woman[,-c(1, 3:24, 26:28)]
 
 #eliminamos filas
 data_woman=data_woman[-c(1:12, 75, 130, 168, 205, 212:267),]
+
 ```
 
 Despues, cambiamos los nombres de las columnas:
 ```{r}
+
 names(data_woman) = c("Country", "Account")
+
 ```
 
 Finalmente, veamos la naturaleza de cada variable:
 ```{r}
+
 str(data_woman) 
 
 #"Account" aparece como caracter, por ende, debemos convertirla a numerica
 data_woman$Account = as.numeric(data_woman$Account)
+
 ```
 
-
-
 #JUNTAREMOS NUESTRAS VARIABLES EN UNA MISMA BASE DE DATOS:
-
 Para juntar la data, usaremos el comando "merge":
 ```{r}
+
 #Primero veamos el nombre de las variables
 names(gender_gap)
 names(data_woman)
@@ -94,26 +97,31 @@ names(data_woman)
 
 gender_data=merge(gender_gap,data_woman,by.x='Country', by.y='Country') 
 head(gender_data)
+
 ```
 
 Asimismo, aplicaremos el comando que nos mostrará los paises en total:
 ```{r}
+
 gender_data2=merge(gender_gap,data_woman,all.x=T,all.y=T)
+
 ```
 Podemos notar que todos los casos de países conicide, es decir, no hay ningún pais mas ni menos en las dos datas usadas antes.
 
 Tambien es importante fijarnos si hay duplicados en nuestra data:
 ```{r}
+
 gender_data[duplicated(gender_data$Country),]
+
 ```
 No hay ninguna columna duplicada.
-
 
 
 #Ahora que ambas están juntas, procederemos a editarle los nombres a los paises. Esto para que nuestra data sea mas limpia y ordenada.
 
 Cambiamos los nombres:
 ```{r}
+
 #Bolivia (Plurinational State of)
 gender_data[gender_data$Country=='Bolivia (Plurinational State of)',"Country"]="Bolivia, Plurinational State of"
 #Congo (Democratic Republic of the)
@@ -137,10 +145,9 @@ gender_data[gender_data$Country=='Venezuela (Bolivarian Republic of)',"Country"]
 
 ```
 
-
 Por último, solo queda exportar, a nuestro Github, nuestra base.
 ```{r}
+
 export(gender_data, "genderData.csv")
+
 ```
-
-

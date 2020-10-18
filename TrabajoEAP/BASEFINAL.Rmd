@@ -1,0 +1,146 @@
+---
+title: "Analisis de datos"
+output: html_notebook
+---
+
+Traemos la base de datos con la que trabajaremos:
+```{r}
+library(rio)
+
+#Traemos la base de datos:
+link="https://github.com/DanaeNorah/Estadistica-para-el-Analisis-Politico-2-/raw/master/TRABAJO/basefinal.csv"
+
+#Importamos la base de datos y le asiganmos el nombre "base"
+base=import(link)
+str(base)
+```
+
+Luego de esto, debemos analizar nuestra data.
+
+1era variable a trabajar: "Desempleo"
+
+  # ANALISIS UNIVARIADO
+```{r}
+str(base$Desempleo)  #es numerica
+```
+
+Medidas de tendencia central:
+```{r}
+##MODA
+library(DescTools)
+Mode(base$Desempleo, na.rm = T)
+#Moda: 1.17 #Frecuencia: 3
+##MEDIANA
+Median(base$Desempleo, na.rm = T)
+#Mediana: 1.21
+#MEDIA
+mean(base$Desempleo, na.rm=T)   
+#Media: 1.48
+#RESUMEN
+summary(base$Desempleo)
+
+library(psych)
+describeBy(base$Desempleo)
+```
+
+GRÁFICOS: como es una variable numerica, usaremos el histograma y boxplot:
+```{r}
+#Gráfico de histograma
+hist(base$Desempleo, col="blue")
+```
+```{r}
+#Gráfico de boxplot
+boxplot(base$Desempleo, main="Boxplot de Desempleo", col="blue")
+```
+
+
+  # ANALISIS BIVARIADO:
+Las dos variables (dependiente e independiente) son numericas, por ende, usaremos las correlaciones para conocer la relacion entre ambas:
+```{r}
+###Variables a usar: Desigualdad de genero (dependiente) y Desempleo (independiente)
+
+##Primero haremos un análisis visual guiandonos del gráfico de dispersión:
+plot(base$DesigualdadGenero, base$Desempleo, xlab="Desigualdad de Genero ", ylab="Desempleo")
+```
+
+Ahora, para confirmar lo observado gracias al gráfico, solicitaremos la prueba R de Pearson:
+
+Hipotesis nula (Ho):Las variables son estadísticamente independientes; es decir, no existe correlación lineal
+Hipotesis alternativa (Ha):Las variables son estadísticamente dependientes; es decir, sí existe correlación lineal
+```{r}
+cor.test(base$DesigualdadGenero, base$Desempleo)
+```
+
+Según la prueba R de Pearson, nuestro Pvalor es 0.8227, el cual es mayor a 0.05, por ende, no rechazamos la hipotesis nula. Por ende, es viable concluir que las variables "desigualdad de genero" y "Desempleo" no están correlacionadas de forma lineal; es decir, son estadisticamente independientes. .
+
+
+2da variable a trabajar: "CuentaF"
+
+  # ANALISIS UNIVARIADO: 
+```{r}
+str(base$CuentaF)  #es numerica
+```
+
+Medidas de Tendencia Central:
+```{r}
+##MODA
+Mode(base$CuentaF, na.rm = T)
+#Moda: 100-- frecuencia: 3
+##MEDIANA
+Median(base$CuentaF, na.rm = T)
+#Mediana: 70.08
+##MEDIA:
+mean(base$CuentaF, na.rm=T)   
+#Media: 55.11
+#RESUMEN
+summary(base$CuentaF)
+
+library(psych)
+describeBy(base$CuentaF)
+```
+
+Graficos:
+```{r}
+#Gráfico de histograma
+hist(base$CuentaF, col="blue")
+```
+```{r}
+#Gráfico de boxplot
+boxplot(base$CuentaF, main="Boxplot de Cuenta Financiera ", col="blue")
+```
+
+  # ANALISIS BIVARIADO:
+Dos variables numericas por ende usaremos la correlacion:
+```{r}
+###Variables a usar: DesigualdadGenero (dependiente) y Cuenta F (independiente)
+
+##Primero haremos un análisis visual guiandonos del gráfico de dispersión:
+plot(base$DesigualdadGenero, base$CuentaF, xlab="Desigualdad de Genero ", ylab="Cuenta Financiera")
+```
+
+Ahora, para confirmar lo afrmado gracias al gráfico, solicitaremos la prueba R de Pearson:
+
+Ho:Las variables son estadísticamente independientes; es decir, no existe correlación lineal
+Ha:Las variables son estadísticamente dependientes; es decir, sí existe correlación lineal
+```{r}
+cor.test(base$DesigualdadGenero, base$CuentaF)
+```
+
+El valor del P-value es  menor a 0.05, por ende, rechazamos la hipotesis nula.
+
+Finalmente, caractericemos la asociacion con el coeficiente de correalcion de Pearson:
+#Intensidad: Alta (cerca a -1)
+#Sentido: Inverso (negativo)
+
+Nuestro Pvalor es 2.2e-16 y como este es menor a 0.05, es viable concluir que las variables, desigualdad de genero y Cuenta Financiera están correlacionadas de forma lineal; es decir, son estadisticamente dependientes. Asimismo, el ceofieciente de R de Pearson es -0.83, entonces podemos decir que hay existe una correlación inversa entre la desigualdad de genero y la cuenta financiera que posee la mujer con una alta o mayor fuerza de asociación.
+
+
+
+
+
+
+
+
+
+
+

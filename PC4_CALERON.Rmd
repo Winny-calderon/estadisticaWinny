@@ -1,0 +1,98 @@
+---
+title: "PC4"
+output: html_notebook
+---
+```{r}
+library(rio)
+library(cluster)
+library(plyr) # para funcion "each"
+library(psych) #para hacer tablas comparadas
+library(knitr) #para generar tablas html
+library(kableExtra) #para generar tablas html
+library(factoextra) #visualización de clusters
+library(ggrepel) #para que las etiquetas de los graficos no se superpongan
+library(htmltab)
+library(dplyr)
+```
+
+CARGANDO LA BASE DE DATOS:
+```{r}
+link="https://github.com/jcgcjuan/Magallanes-Clases-/raw/master/Data%20EconoFreedom.xlsx"
+library(rio)
+libertad=import(link)
+```
+
+#PRIMERA PARTE:
+LIMPIEZA DE DATOS:
+```{r}
+row.names(libertad)=libertad$CountryID
+#eliminando columnas que no me sirven:
+libertad$CountryID = NULL
+libertad$Region=NULL
+libertad$`World Rank`=NULL
+libertad$`Region Rank`=NULL
+libertad$`2019 Score`=NULL
+
+#PRESENCIA DE DATOS NO AGRUPADOS:
+libertad[!complete.cases(libertad),]
+#OMISION DE NA'S
+libertad = na.omit(libertad)
+
+str(libertad)
+
+#CONVERSION DE VARIABLES A NUMERICAS:
+libertad[,c(2:13)]=lapply(libertad[,c(2:13)],as.numeric)
+libertad = na.omit(libertad)
+```
+
+#SEGUNDA PARTE:
+CONGLOMERADOS--
+LA DISTANCIA:
+```{r}
+library(factoextra)
+head(libertad)[, c(2:13)]
+dist = daisy(libertad[,c(2:13)], metric = "gower") 
+```
+
+PARTICIONANTE:
+```{r}
+# Calculamos los cluster
+libertad_data= pam(dist, 4, cluster.only = T)
+# Creamos una variable en la data con el cluster creado
+libertad$partic = libertad_data
+# Visualizamos los cluster
+fviz_cluster(object = list(data=dist, cluster = libertad$partic),
+             ellipse = FALSE, labelsize = 8,
+             repel = T, main = "Agrupación particionante")
+```
+B. Los grupos no se distinguen claramente, hay unos que se superponen sobre otros, por ende, lo más optimo será realizar el método jerarquico
+
+C. Otra alternativa: CLUSTER AGLOMERATIVO
+```{r}
+# Calculamos los cluster
+libertad_aglo <- hcut(dist, k = 4 , hc_func='agnes',hc_method = "ward.D")
+# Creamos una variable en la data con el cluster creado
+libertad$Caglome = libertad_aglo$cluster
+# Visualizamos los cluster
+fviz_dend(libertad_aglo, cex = 0.7, horiz = T, main = "Agrupación aglomerativa")
+```
+
+CLUSTER DIVISIVO:
+```{r}
+libertad_divid <- hcut(dist, k = 4 , hc_func='diana')
+libertad$Cdivis = libertad_divid$cluster
+fviz_dend(libertad_divid, cex = 0.7, horiz = T, main = "Agrupación divisiva")
+```
+
+INTERP: ...
+
+
+
+
+
+
+
+
+
+
+

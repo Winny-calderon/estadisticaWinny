@@ -1748,14 +1748,376 @@ summary {
 </div>
 
 
-<p>This is an <a href="http://rmarkdown.rstudio.com">R Markdown</a> Notebook. When you execute code within the notebook, the results appear beneath the code.</p>
-<p>Try executing this chunk by clicking the <em>Run</em> button within the chunk or by placing your cursor inside it and pressing <em>Ctrl+Shift+Enter</em>.</p>
-<pre class="{r}"><code>plot(cars)</code></pre>
-<p>Add a new chunk by clicking the <em>Insert Chunk</em> button on the toolbar or by pressing <em>Ctrl+Alt+I</em>.</p>
-<p>When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the <em>Preview</em> button or press <em>Ctrl+Shift+K</em> to preview the HTML file).</p>
-<p>The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike <em>Knit</em>, <em>Preview</em> does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.</p>
+<!-- rnb-text-begin -->
+<p>##CLASE 2## PRE PROCESAMIENTO DE DATOS</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShodG1sdGFiKSBcblxubGlua0NJQV91cmIgPSBcImh0dHBzOi8vd3d3LmNpYS5nb3YvbGlicmFyeS9wdWJsaWNhdGlvbnMvcmVzb3VyY2VzL3RoZS13b3JsZC1mYWN0Ym9vay9maWVsZHMvMzQ5Lmh0bWxcIlxubGlua1BhdGhfdXJiPScvLypbQGlkPVwiZmllbGRMaXN0aW5nXCJdJ1xuXG51cmJhbiA9IGh0bWx0YWIoZG9jID0gbGlua0NJQV91cmIsIFxuICAgICAgICAgICAgICAgIHdoaWNoID1saW5rUGF0aF91cmIpXG5gYGAifQ== -->
+<pre class="r"><code>library(htmltab) 
 
-<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQpUaGlzIGlzIGFuIFtSIE1hcmtkb3duXShodHRwOi8vcm1hcmtkb3duLnJzdHVkaW8uY29tKSBOb3RlYm9vay4gV2hlbiB5b3UgZXhlY3V0ZSBjb2RlIHdpdGhpbiB0aGUgbm90ZWJvb2ssIHRoZSByZXN1bHRzIGFwcGVhciBiZW5lYXRoIHRoZSBjb2RlLiANCg0KVHJ5IGV4ZWN1dGluZyB0aGlzIGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqUnVuKiBidXR0b24gd2l0aGluIHRoZSBjaHVuayBvciBieSBwbGFjaW5nIHlvdXIgY3Vyc29yIGluc2lkZSBpdCBhbmQgcHJlc3NpbmcgKkN0cmwrU2hpZnQrRW50ZXIqLiANCg0KYGBge3J9DQpwbG90KGNhcnMpDQpgYGANCg0KQWRkIGEgbmV3IGNodW5rIGJ5IGNsaWNraW5nIHRoZSAqSW5zZXJ0IENodW5rKiBidXR0b24gb24gdGhlIHRvb2xiYXIgb3IgYnkgcHJlc3NpbmcgKkN0cmwrQWx0K0kqLg0KDQpXaGVuIHlvdSBzYXZlIHRoZSBub3RlYm9vaywgYW4gSFRNTCBmaWxlIGNvbnRhaW5pbmcgdGhlIGNvZGUgYW5kIG91dHB1dCB3aWxsIGJlIHNhdmVkIGFsb25nc2lkZSBpdCAoY2xpY2sgdGhlICpQcmV2aWV3KiBidXR0b24gb3IgcHJlc3MgKkN0cmwrU2hpZnQrSyogdG8gcHJldmlldyB0aGUgSFRNTCBmaWxlKS4NCg0KVGhlIHByZXZpZXcgc2hvd3MgeW91IGEgcmVuZGVyZWQgSFRNTCBjb3B5IG9mIHRoZSBjb250ZW50cyBvZiB0aGUgZWRpdG9yLiBDb25zZXF1ZW50bHksIHVubGlrZSAqS25pdCosICpQcmV2aWV3KiBkb2VzIG5vdCBydW4gYW55IFIgY29kZSBjaHVua3MuIEluc3RlYWQsIHRoZSBvdXRwdXQgb2YgdGhlIGNodW5rIHdoZW4gaXQgd2FzIGxhc3QgcnVuIGluIHRoZSBlZGl0b3IgaXMgZGlzcGxheWVkLg0K</div>
+linkCIA_urb = &quot;https://www.cia.gov/library/publications/resources/the-world-factbook/fields/349.html&quot;
+linkPath_urb=&#39;//*[@id=&quot;fieldListing&quot;]&#39;
+
+urban = htmltab(doc = linkCIA_urb, 
+                which =linkPath_urb)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh1cmJhbilcbmBgYCJ9 -->
+<pre class="r"><code>head(urban)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBWZXIgZWwgcHJpbWVyIHZhbG9yIGRlIGxhIHNlZ3VuZGEgY29sdW1uYSAjZmlsYSAxLCBjb2x1bW5hIDJcbnVyYmFuWzEsMl1cbmBgYCJ9 -->
+<pre class="r"><code># Ver el primer valor de la segunda columna #fila 1, columna 2
+urban[1,2]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Para separar esas dos variables–</p>
+<ol style="list-style-type: decimal">
+<li>USO DE EXPRESIONES REGULARES:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShzdHJpbmdyKVxuI21lIGV4dHJhZSBjYWRhIG51bWVyb1xuc3RyX2V4dHJhY3RfYWxsKHN0cmluZyA9ICcyNS4zJSwwJSB5IDIzLjUlIDEzIDM0IGhvbGEnLHBhdHRlcm49XCJcXFxcZFwiKVxuYGBgIn0= -->
+<pre class="r"><code>library(stringr)
+#me extrae cada numero
+str_extract_all(string = &#39;25.3%,0% y 23.5% 13 34 hola&#39;,pattern=&quot;\\d&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBtZSB0cmFlIG51bWVyb3MgYWR5YWNlbnRlczpcbnN0cl9leHRyYWN0X2FsbCgnMjUuMyUsMCUgeSAyMy41JSAxMyAzNCBob2xhJyxcbiAgICAgICAgICAgICAgICBcIlxcXFxkK1wiKSAjICsgZXMgYWwgbWVub3MgMSAvICogZXMgMCBvIG3DoXNcbmBgYCJ9 -->
+<pre class="r"><code># me trae numeros adyacentes:
+str_extract_all(&#39;25.3%,0% y 23.5% 13 34 hola&#39;,
+                &quot;\\d+&quot;) # + es al menos 1 / * es 0 o más</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBudW1lcm8gZW50ZXJvLCBzZWd1aWRvIG9wY2lvbmFsbWVudGUgZGUgcHVudG8sIG1hcyBudW1lcm8gZGUgdW5hIG8gbWFzIGNpZnJhcy5cbnN0cl9leHRyYWN0X2FsbCgnMjUuMyUsMCUgeSAyMy41JSAxMyAzNCBob2xhJyxcbiAgICAgICAgICAgICAgICBcIlxcXFxkK1xcXFwuKlxcXFxkKlwiKVxuYGBgIn0= -->
+<pre class="r"><code># numero entero, seguido opcionalmente de punto, mas numero de una o mas cifras.
+str_extract_all(&#39;25.3%,0% y 23.5% 13 34 hola&#39;,
+                &quot;\\d+\\.*\\d*&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBudW1lcm8gZW50ZXJvLCBzZWd1aWRvIG9wY2lvbmFsbWVudGUgZGUgcHVudG8sIG1hcyBudW1lcm8gZGUgdW5hIG8gbWFzIGNpZnJhcywgc2VndWlkbyBkZSAlLlxuc3RyX2V4dHJhY3RfYWxsKCcyNS4zJSwwJSB5IDIzLjUlIDEzIDM0IGhvbGEnLFxuICAgICAgICAgICAgICAgIFwiXFxcXGQrXFxcXC4qXFxcXGQqXFxcXCVcIilcbmBgYCJ9 -->
+<pre class="r"><code># numero entero, seguido opcionalmente de punto, mas numero de una o mas cifras, seguido de %.
+str_extract_all(&#39;25.3%,0% y 23.5% 13 34 hola&#39;,
+                &quot;\\d+\\.*\\d*\\%&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwb3JjZW50YWplIHNpbiBlbCBzaW1ib2xvICNTT0xPIExPUyBRVUUgVEVORU4gUE9SQ0VOVEFKRSBQRVJPIE5PIE1FIFBPTkdBUyBFTCBTSU1CT0xPOlxuXG4jICBxdWUgYW50ZXMgZGUgKD89XFxcXCUpIGhheWEgKFxcXFxkK1xcXFwuKlxcXFxkKilcbiMgIHBlcm8gc29sbyB0cmFlIChcXFxcZCtcXFxcLipcXFxcZCopXG4gICAgXG5zdHJfZXh0cmFjdF9hbGwoJzI1LjMlLDAlIHkgMjMuNSUgMTMgMzQgaG9sYScsXG4gICAgICAgICAgICAgICAgXCIoXFxcXGQrXFxcXC4qXFxcXGQqKSg/PVxcXFwlKVwiKVxuYGBgIn0= -->
+<pre class="r"><code># porcentaje sin el simbolo #SOLO LOS QUE TENEN PORCENTAJE PERO NO ME PONGAS EL SIMBOLO:
+
+#  que antes de (?=\\%) haya (\\d+\\.*\\d*)
+#  pero solo trae (\\d+\\.*\\d*)
+    
+str_extract_all(&#39;25.3%,0% y 23.5% 13 34 hola&#39;,
+                &quot;(\\d+\\.*\\d*)(?=\\%)&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>CASO DE NUMEROS NEGATIVOS:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwb3JjZW50YWplIHNpbiBlbCBzaW1ib2xvXG5zdHJfZXh0cmFjdF9hbGwoJzI1LjMlLDAlIHkgLTIzLjUlIDEzIDM0IGhvbGEnLFxuICAgICAgICAgICAgICAgIFwiKFxcXFxkK1xcXFwuKlxcXFxkKikoPz1cXFxcJSlcIilcbmBgYCJ9 -->
+<pre class="r"><code># porcentaje sin el simbolo
+str_extract_all(&#39;25.3%,0% y -23.5% 13 34 hola&#39;,
+                &quot;(\\d+\\.*\\d*)(?=\\%)&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwb3JjZW50YWplIHNpbiBlbCBzaW1ib2xvIHBlcm8gY29uIHNpZ25vIG5lZ2F0aXZvLCBzaSBodWJpZXNlXG4jIFNJTiBFTCBTSU1CT0xPIERFIFBPUkNFTlRBSkUgUEVSTyBTSSBFTCBORUdBVElWT1xuc3RyX2V4dHJhY3RfYWxsKCcyNS4zJSwwJSB5IC0yMy41JSAxMyAzNCBob2xhJyxcbiAgICAgICAgICAgICAgICBcIihcXFxcLSpcXFxcZCtcXFxcLipcXFxcZCopKD89XFxcXCUpXCIpXG5gYGAifQ== -->
+<pre class="r"><code># porcentaje sin el simbolo pero con signo negativo, si hubiese
+# SIN EL SIMBOLO DE PORCENTAJE PERO SI EL NEGATIVO
+str_extract_all(&#39;25.3%,0% y -23.5% 13 34 hola&#39;,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>MÁS DETALLES:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBjb24gW1sxXV0gcmVjaWVuIGFjY2VkZW1vcyBhbCBlbGVtZW50bzpcbnN0cl9leHRyYWN0X2FsbCgnMjUuMyUsIDAlIHkgMjMlJyxcbiAgICAgICAgICAgICAgICBcIihcXFxcLSpcXFxcZCtcXFxcLipcXFxcZCopKD89XFxcXCUpXCIpW1sxXV1cbmBgYCJ9 -->
+<pre class="r"><code># con [[1]] recien accedemos al elemento:
+str_extract_all(&#39;25.3%, 0% y 23%&#39;,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)[[1]]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBwcmltZXIgdmFsb3IgZXMgI0FQTElDQUxFIFRPRE8gU09MTyBBIE1JIFBSSU1FUiBWQUxPUjpcbnN0cl9leHRyYWN0X2FsbCgnMjUlLCAwJSB5IDIzLjUlJyxcbiAgICAgICAgICAgICAgICBcIihcXFxcLSpcXFxcZCtcXFxcLipcXFxcZCopKD89XFxcXCUpXCIpW1sxXV1bMV1cbmBgYCJ9 -->
+<pre class="r"><code># primer valor es #APLICALE TODO SOLO A MI PRIMER VALOR:
+str_extract_all(&#39;25%, 0% y 23.5%&#39;,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)[[1]][1]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyBzZWd1bmRvIHZhbG9yIGVzXG5zdHJfZXh0cmFjdF9hbGwoJzI1JSwgMCUgeSAyMy41JScsXG4gICAgICAgICAgICAgICAgXCIoXFxcXC0qXFxcXGQrXFxcXC4qXFxcXGQqKSg/PVxcXFwlKVwiKVtbMV1dWzJdXG5gYGAifQ== -->
+<pre class="r"><code># segundo valor es
+str_extract_all(&#39;25%, 0% y 23.5%&#39;,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)[[1]][2]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyB0ZXJjZXIgdmFsb3IgZXNcbnN0cl9leHRyYWN0X2FsbCgnMjUlLCAwJSB5IDIzLjUlJywgXG4gICAgICAgICAgICAgICAgXCIoXFxcXC0qXFxcXGQrXFxcXC4qXFxcXGQqKSg/PVxcXFwlKVwiKVtbMV1dWzNdXG5gYGAifQ== -->
+<pre class="r"><code># tercer valor es
+str_extract_all(&#39;25%, 0% y 23.5%&#39;, 
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)[[1]][3]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>APLICANDO A LA COLUMNA:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX2V4dHJhY3RfYWxsKHVyYmFuJFVyYmFuaXphdGlvbixcbiAgICAgICAgICAgICAgICBcIihcXFxcLSpcXFxcZCtcXFxcLipcXFxcZCopKD89XFxcXCUpXCIpXG5gYGAifQ== -->
+<pre class="r"><code>str_extract_all(urban$Urbanization,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Simplify facilita el trabajo:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX2V4dHJhY3RfYWxsKHVyYmFuJFVyYmFuaXphdGlvbixcbiAgICAgICAgICAgICAgICBcIihcXFxcLSpcXFxcZCtcXFxcLipcXFxcZCopKD89XFxcXCUpXCIsXG4gICAgICAgICAgICAgICAgc2ltcGxpZnkgPSBUKVxuYGBgIn0= -->
+<pre class="r"><code>str_extract_all(urban$Urbanization,
+                &quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;,
+                simplify = T)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Esa matriz ya me dice que hacer en cada columna:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuUEFUUk9OPVwiKFxcXFwtKlxcXFxkK1xcXFwuKlxcXFxkKikoPz1cXFxcJSlcIlxuQ09MU1VDSUE9dXJiYW4kVXJiYW5pemF0aW9uXG5cbiMgVU5BIENPTFVNTkFcbnVyYmFuJHBvcF91cmI9c3RyX2V4dHJhY3RfYWxsKHN0cmluZyA9IENPTFNVQ0lBLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGF0dGVybj0gUEFUUk9OLFxuICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2ltcGxpZnkgPSBUKVssMV1cblxuIyBPVFJBIENPTFVNTkFcbnVyYmFuJHJhdGVfdXJiPXN0cl9leHRyYWN0X2FsbChzdHJpbmcgPSBDT0xTVUNJQSxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBwYXR0ZXJuPVBBVFJPTixcbiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpWywyXVxuYGBgIn0= -->
+<pre class="r"><code>PATRON=&quot;(\\-*\\d+\\.*\\d*)(?=\\%)&quot;
+COLSUCIA=urban$Urbanization
+
+# UNA COLUMNA
+urban$pop_urb=str_extract_all(string = COLSUCIA,
+                              pattern= PATRON,
+                              simplify = T)[,1]
+
+# OTRA COLUMNA
+urban$rate_urb=str_extract_all(string = COLSUCIA,
+                               pattern=PATRON,
+                               simplify = T)[,2]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuaGVhZCh1cmJhblssLTJdKSAjIHNpbiBtb3N0cmFyIGxhIGNvbHVtbmEgJ3N1Y2lhJ1xuYGBgIn0= -->
+<pre class="r"><code>head(urban[,-2]) # sin mostrar la columna &#39;sucia&#39;</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="2" style="list-style-type: decimal">
+<li>USO DE PARTICIONES</li>
+</ol>
+<p>Hacer lo mismo pero a través de particiones:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuIyByZWN1ZXJkYTpcbnRlc3Q9dXJiYW5bMSwyXVxudGVzdFxuYGBgIn0= -->
+<pre class="r"><code># recuerda:
+test=urban[1,2]
+test</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Buscar texto que permita dividir la cadena de texto:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3NwbGl0KHN0cmluZyA9IHRlc3QsXG4gICAgICAgICAgcGF0dGVybiA9ICdyYXRlIG9mIHVyYmFuaXphdGlvbjonKVxuYGBgIn0= -->
+<pre class="r"><code>str_split(string = test,
+          pattern = &#39;rate of urbanization:&#39;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Así todo sucio creo dos columnas:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcG9wX3VyYjI9c3RyX3NwbGl0KHN0cmluZyA9IHVyYmFuJFVyYmFuaXphdGlvbixcbiAgICAgICAgICAgICAgICAgICAgICAgICBwYXR0ZXJuID0gJ3JhdGUgb2YgdXJiYW5pemF0aW9uOicsXG4gICAgICAgICAgICAgICAgICAgICAgICAgc2ltcGxpZnkgPSBUKVssMV1cblxudXJiYW4kcmF0ZV91cmIyPXN0cl9zcGxpdChzdHJpbmcgPSB1cmJhbiRVcmJhbml6YXRpb24sXG4gICAgICAgICAgICAgICAgICAgICAgICAgIHBhdHRlcm4gPSAncmF0ZSBvZiB1cmJhbml6YXRpb246JyxcbiAgICAgICAgICAgICAgICAgICAgICAgICAgc2ltcGxpZnkgPSBUKVssMl1cbmBgYCJ9 -->
+<pre class="r"><code>urban$pop_urb2=str_split(string = urban$Urbanization,
+                         pattern = &#39;rate of urbanization:&#39;,
+                         simplify = T)[,1]
+
+urban$rate_urb2=str_split(string = urban$Urbanization,
+                          pattern = &#39;rate of urbanization:&#39;,
+                          simplify = T)[,2]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Limpiar la primera columna:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcG9wX3VyYjJbMV1cbmBgYCJ9 -->
+<pre class="r"><code>urban$pop_urb2[1]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcG9wX3VyYjI9c3RyX3NwbGl0KHVyYmFuJHBvcF91cmIyLFxuICAgICAgICAgICAgICAgICAgICAgICAgICclIG9mIHRvdGFsJyxcbiAgICAgICAgICAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpWywxXVxuXG4jYWhvcmE6XG51cmJhbiRwb3BfdXJiMlsxXVxuYGBgIn0= -->
+<pre class="r"><code>urban$pop_urb2=str_split(urban$pop_urb2,
+                         &#39;% of total&#39;,
+                         simplify = T)[,1]
+
+#ahora:
+urban$pop_urb2[1]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcG9wX3VyYjI9c3RyX3NwbGl0KHVyYmFuJHBvcF91cmIyLFxuICAgICAgICAgICAgICAgICAgICAgICAgICc6JyxcbiAgICAgICAgICAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpWywyXVxuXG4jdGVuZ29cbnVyYmFuJHBvcF91cmIyXG5gYGAifQ== -->
+<pre class="r"><code>urban$pop_urb2=str_split(urban$pop_urb2,
+                         &#39;:&#39;,
+                         simplify = T)[,2]
+
+#tengo
+urban$pop_urb2</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>La misma estrategia:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcmF0ZV91cmIyWzFdXG5gYGAifQ== -->
+<pre class="r"><code>urban$rate_urb2[1]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kcmF0ZV91cmIyPXN0cl9zcGxpdCh1cmJhbiRyYXRlX3VyYjIsXG4gICAgICAgICAgICAgICAgICAgICAgICAgJyUnLFxuICAgICAgICAgICAgICAgICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDFdXG4jdGVuZW1vczpcbmhlYWQodXJiYW5bLC0yXSkgI21lbm9zIGxhIGNvbHVtbmEgMlxuYGBgIn0= -->
+<pre class="r"><code>urban$rate_urb2=str_split(urban$rate_urb2,
+                         &#39;%&#39;,
+                         simplify = T)[,1]
+#tenemos:
+head(urban[,-2]) #menos la columna 2</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<ol start="3" style="list-style-type: decimal">
+<li>Parsers:</li>
+</ol>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShyZWFkcilcblxucGFyc2VfbnVtYmVyKHggPSBcIiQxMzksMTAwIDMyXCIpXG5gYGAifQ== -->
+<pre class="r"><code>library(readr)
+
+parse_number(x = &quot;$139,100 32&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Pero solo recupera EL PRIMER VALOR:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucGFyc2VfbnVtYmVyKHVyYmFuJFVyYmFuaXphdGlvbilcbmBgYCJ9 -->
+<pre class="r"><code>parse_number(urban$Urbanization)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Combinarlo con la estrategia separadora:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShtYWdyaXR0cikgIyBwYXJhICU+JVxuXG5zdHJfc3BsaXQoc3RyaW5nID0gdXJiYW4kVXJiYW5pemF0aW9uLFxuICAgICAgICAgIHBhdHRlcm4gPSAncmF0ZSBvZiB1cmJhbml6YXRpb246JyxcbiAgICAgICAgICBzaW1wbGlmeSA9IFQpWywxXSU+JXBhcnNlX251bWJlcigpXG5gYGAifQ== -->
+<pre class="r"><code>library(magrittr) # para %&gt;%
+
+str_split(string = urban$Urbanization,
+          pattern = &#39;rate of urbanization:&#39;,
+          simplify = T)[,1]%&gt;%parse_number()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyX3NwbGl0KHN0cmluZyA9IHVyYmFuJFVyYmFuaXphdGlvbixcbiAgICAgICAgICBwYXR0ZXJuID0gJ3JhdGUgb2YgdXJiYW5pemF0aW9uOicsXG4gICAgICAgICAgc2ltcGxpZnkgPSBUKVssMl0lPiVwYXJzZV9udW1iZXIoKVxuYGBgIn0= -->
+<pre class="r"><code>str_split(string = urban$Urbanization,
+          pattern = &#39;rate of urbanization:&#39;,
+          simplify = T)[,2]%&gt;%parse_number()</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Solo te saca los valores, ya no letras que más limpiar.</p>
+<ol start="4" style="list-style-type: decimal">
+<li>Otras funciones</li>
+</ol>
+<p>Funcion “gsub”:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxucG9yY2VudGFqZXM9YygnMTMlJywnMzMlJywnNTUlJylcbmdzdWIoJyUnLFwiXCIscG9yY2VudGFqZXMpICMgbG8gcmVlbXBsYXphIHBvciBuYWRhICcnLlxuYGBgIn0= -->
+<pre class="r"><code>porcentajes=c(&#39;13%&#39;,&#39;33%&#39;,&#39;55%&#39;)
+gsub(&#39;%&#39;,&quot;&quot;,porcentajes) # lo reemplaza por nada &#39;&#39;.</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ3N1YignLHxcXFxcJCcsXCJcIixcIiQxMzksMTAwXCIpXG5gYGAifQ== -->
+<pre class="r"><code>gsub(&#39;,|\\$&#39;,&quot;&quot;,&quot;$139,100&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>verificar el tipo de datos:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKHVyYmFuKVxuYGBgIn0= -->
+<pre class="r"><code>str(urban)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Eliminamos columnas repetidas:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW5bLGMoMiw1LDYpXT1OVUxMXG5gYGAifQ== -->
+<pre class="r"><code>urban[,c(2,5,6)]=NULL</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Lapply- la funcion en varias columnas.</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW5bLC0xXT1sYXBwbHkodXJiYW5bLC0xXSwgYXMubnVtZXJpYylcbmBgYCJ9 -->
+<pre class="r"><code>urban[,-1]=lapply(urban[,-1], as.numeric)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>valores perdidos:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW5bIWNvbXBsZXRlLmNhc2VzKHVyYmFuKSxdXG5gYGAifQ== -->
+<pre class="r"><code>urban[!complete.cases(urban),]</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>Eliminar espacios en blanco antes y despues del texto:</p>
+<!-- rnb-text-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudGV4dG9zPWMoJyBhYmMnLCdwcXIgJywgJyB4eXogJylcbnRyaW13cyh0ZXh0b3Msd2hpdGVzcGFjZSA9IFwiW1xcXFxoXFxcXHZdXCIpXG5gYGAifQ== -->
+<pre class="r"><code>textos=c(&#39; abc&#39;,&#39;pqr &#39;, &#39; xyz &#39;)
+trimws(textos,whitespace = &quot;[\\h\\v]&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxudXJiYW4kQ291bnRyeT10cmltd3ModXJiYW4kQ291bnRyeSx3aGl0ZXNwYWNlID0gXCJbXFxcXGhcXFxcdl1cIilcbmBgYCJ9 -->
+<pre class="r"><code>urban$Country=trimws(urban$Country,whitespace = &quot;[\\h\\v]&quot;)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-chunk-begin -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3RyKHVyYmFuKVxuYGBgIn0= -->
+<pre class="r"><code>str(urban)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-chunk-end -->
+<!-- rnb-text-begin -->
+<p>EJERCICIOS:</p>
+<!-- rnb-text-end -->
+
+<div id="rmd-source-code">LS0tDQp0aXRsZTogIlIgTm90ZWJvb2siDQpvdXRwdXQ6IGh0bWxfbm90ZWJvb2sNCi0tLQ0KDQojI0NMQVNFIDIjIyBQUkUgUFJPQ0VTQU1JRU5UTyBERSBEQVRPUw0KDQpgYGB7cn0NCmxpYnJhcnkoaHRtbHRhYikgDQoNCmxpbmtDSUFfdXJiID0gImh0dHBzOi8vd3d3LmNpYS5nb3YvbGlicmFyeS9wdWJsaWNhdGlvbnMvcmVzb3VyY2VzL3RoZS13b3JsZC1mYWN0Ym9vay9maWVsZHMvMzQ5Lmh0bWwiDQpsaW5rUGF0aF91cmI9Jy8vKltAaWQ9ImZpZWxkTGlzdGluZyJdJw0KDQp1cmJhbiA9IGh0bWx0YWIoZG9jID0gbGlua0NJQV91cmIsIA0KICAgICAgICAgICAgICAgIHdoaWNoID1saW5rUGF0aF91cmIpDQpgYGANCg0KYGBge3J9DQpoZWFkKHVyYmFuKQ0KYGBgDQoNCmBgYHtyfQ0KIyBWZXIgZWwgcHJpbWVyIHZhbG9yIGRlIGxhIHNlZ3VuZGEgY29sdW1uYSAjZmlsYSAxLCBjb2x1bW5hIDINCnVyYmFuWzEsMl0NCmBgYA0KUGFyYSBzZXBhcmFyIGVzYXMgZG9zIHZhcmlhYmxlcy0tDQoNCjEuIFVTTyBERSBFWFBSRVNJT05FUyBSRUdVTEFSRVM6DQoNCmBgYHtyfQ0KbGlicmFyeShzdHJpbmdyKQ0KI21lIGV4dHJhZSBjYWRhIG51bWVybw0Kc3RyX2V4dHJhY3RfYWxsKHN0cmluZyA9ICcyNS4zJSwwJSB5IDIzLjUlIDEzIDM0IGhvbGEnLHBhdHRlcm49IlxcZCIpDQpgYGANCmBgYHtyfQ0KIyBtZSB0cmFlIG51bWVyb3MgYWR5YWNlbnRlczoNCnN0cl9leHRyYWN0X2FsbCgnMjUuMyUsMCUgeSAyMy41JSAxMyAzNCBob2xhJywNCiAgICAgICAgICAgICAgICAiXFxkKyIpICMgKyBlcyBhbCBtZW5vcyAxIC8gKiBlcyAwIG8gbcOhcw0KYGBgDQpgYGB7cn0NCiMgbnVtZXJvIGVudGVybywgc2VndWlkbyBvcGNpb25hbG1lbnRlIGRlIHB1bnRvLCBtYXMgbnVtZXJvIGRlIHVuYSBvIG1hcyBjaWZyYXMuDQpzdHJfZXh0cmFjdF9hbGwoJzI1LjMlLDAlIHkgMjMuNSUgMTMgMzQgaG9sYScsDQogICAgICAgICAgICAgICAgIlxcZCtcXC4qXFxkKiIpDQpgYGANCg0KYGBge3J9DQojIG51bWVybyBlbnRlcm8sIHNlZ3VpZG8gb3BjaW9uYWxtZW50ZSBkZSBwdW50bywgbWFzIG51bWVybyBkZSB1bmEgbyBtYXMgY2lmcmFzLCBzZWd1aWRvIGRlICUuDQpzdHJfZXh0cmFjdF9hbGwoJzI1LjMlLDAlIHkgMjMuNSUgMTMgMzQgaG9sYScsDQogICAgICAgICAgICAgICAgIlxcZCtcXC4qXFxkKlxcJSIpDQpgYGANCmBgYHtyfQ0KIyBwb3JjZW50YWplIHNpbiBlbCBzaW1ib2xvICNTT0xPIExPUyBRVUUgVEVORU4gUE9SQ0VOVEFKRSBQRVJPIE5PIE1FIFBPTkdBUyBFTCBTSU1CT0xPOg0KDQojICBxdWUgYW50ZXMgZGUgKD89XFwlKSBoYXlhIChcXGQrXFwuKlxcZCopDQojICBwZXJvIHNvbG8gdHJhZSAoXFxkK1xcLipcXGQqKQ0KICAgIA0Kc3RyX2V4dHJhY3RfYWxsKCcyNS4zJSwwJSB5IDIzLjUlIDEzIDM0IGhvbGEnLA0KICAgICAgICAgICAgICAgICIoXFxkK1xcLipcXGQqKSg/PVxcJSkiKQ0KYGBgDQpDQVNPIERFIE5VTUVST1MgTkVHQVRJVk9TOg0KDQpgYGB7cn0NCiMgcG9yY2VudGFqZSBzaW4gZWwgc2ltYm9sbw0Kc3RyX2V4dHJhY3RfYWxsKCcyNS4zJSwwJSB5IC0yMy41JSAxMyAzNCBob2xhJywNCiAgICAgICAgICAgICAgICAiKFxcZCtcXC4qXFxkKikoPz1cXCUpIikNCmBgYA0KYGBge3J9DQojIHBvcmNlbnRhamUgc2luIGVsIHNpbWJvbG8gcGVybyBjb24gc2lnbm8gbmVnYXRpdm8sIHNpIGh1Ymllc2UNCiMgU0lOIEVMIFNJTUJPTE8gREUgUE9SQ0VOVEFKRSBQRVJPIFNJIEVMIE5FR0FUSVZPDQpzdHJfZXh0cmFjdF9hbGwoJzI1LjMlLDAlIHkgLTIzLjUlIDEzIDM0IGhvbGEnLA0KICAgICAgICAgICAgICAgICIoXFwtKlxcZCtcXC4qXFxkKikoPz1cXCUpIikNCmBgYA0KDQpNw4FTIERFVEFMTEVTOg0KYGBge3J9DQojIGNvbiBbWzFdXSByZWNpZW4gYWNjZWRlbW9zIGFsIGVsZW1lbnRvOg0Kc3RyX2V4dHJhY3RfYWxsKCcyNS4zJSwgMCUgeSAyMyUnLA0KICAgICAgICAgICAgICAgICIoXFwtKlxcZCtcXC4qXFxkKikoPz1cXCUpIilbWzFdXQ0KYGBgDQpgYGB7cn0NCiMgcHJpbWVyIHZhbG9yIGVzICNBUExJQ0FMRSBUT0RPIFNPTE8gQSBNSSBQUklNRVIgVkFMT1I6DQpzdHJfZXh0cmFjdF9hbGwoJzI1JSwgMCUgeSAyMy41JScsDQogICAgICAgICAgICAgICAgIihcXC0qXFxkK1xcLipcXGQqKSg/PVxcJSkiKVtbMV1dWzFdDQpgYGANCmBgYHtyfQ0KIyBzZWd1bmRvIHZhbG9yIGVzDQpzdHJfZXh0cmFjdF9hbGwoJzI1JSwgMCUgeSAyMy41JScsDQogICAgICAgICAgICAgICAgIihcXC0qXFxkK1xcLipcXGQqKSg/PVxcJSkiKVtbMV1dWzJdDQpgYGANCmBgYHtyfQ0KIyB0ZXJjZXIgdmFsb3IgZXMNCnN0cl9leHRyYWN0X2FsbCgnMjUlLCAwJSB5IDIzLjUlJywgDQogICAgICAgICAgICAgICAgIihcXC0qXFxkK1xcLipcXGQqKSg/PVxcJSkiKVtbMV1dWzNdDQpgYGANCkFQTElDQU5ETyBBIExBIENPTFVNTkE6DQpgYGB7cn0NCnN0cl9leHRyYWN0X2FsbCh1cmJhbiRVcmJhbml6YXRpb24sDQogICAgICAgICAgICAgICAgIihcXC0qXFxkK1xcLipcXGQqKSg/PVxcJSkiKQ0KYGBgDQpTaW1wbGlmeSBmYWNpbGl0YSBlbCB0cmFiYWpvOg0KYGBge3J9DQpzdHJfZXh0cmFjdF9hbGwodXJiYW4kVXJiYW5pemF0aW9uLA0KICAgICAgICAgICAgICAgICIoXFwtKlxcZCtcXC4qXFxkKikoPz1cXCUpIiwNCiAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpDQpgYGANCg0KRXNhIG1hdHJpeiB5YSBtZSBkaWNlIHF1ZSBoYWNlciBlbiBjYWRhIGNvbHVtbmE6DQpgYGB7cn0NClBBVFJPTj0iKFxcLSpcXGQrXFwuKlxcZCopKD89XFwlKSINCkNPTFNVQ0lBPXVyYmFuJFVyYmFuaXphdGlvbg0KDQojIFVOQSBDT0xVTU5BDQp1cmJhbiRwb3BfdXJiPXN0cl9leHRyYWN0X2FsbChzdHJpbmcgPSBDT0xTVUNJQSwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHBhdHRlcm49IFBBVFJPTiwNCiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDFdDQoNCiMgT1RSQSBDT0xVTU5BDQp1cmJhbiRyYXRlX3VyYj1zdHJfZXh0cmFjdF9hbGwoc3RyaW5nID0gQ09MU1VDSUEsDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgcGF0dGVybj1QQVRST04sDQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgc2ltcGxpZnkgPSBUKVssMl0NCmBgYA0KDQpgYGB7cn0NCmhlYWQodXJiYW5bLC0yXSkgIyBzaW4gbW9zdHJhciBsYSBjb2x1bW5hICdzdWNpYScNCmBgYA0KDQoyLiAgVVNPIERFIFBBUlRJQ0lPTkVTDQoNCkhhY2VyIGxvIG1pc21vIHBlcm8gYSB0cmF2w6lzIGRlIHBhcnRpY2lvbmVzOg0KYGBge3J9DQojIHJlY3VlcmRhOg0KdGVzdD11cmJhblsxLDJdDQp0ZXN0DQpgYGANCkJ1c2NhciB0ZXh0byBxdWUgcGVybWl0YSBkaXZpZGlyIGxhIGNhZGVuYSBkZSB0ZXh0bzoNCmBgYHtyfQ0Kc3RyX3NwbGl0KHN0cmluZyA9IHRlc3QsDQogICAgICAgICAgcGF0dGVybiA9ICdyYXRlIG9mIHVyYmFuaXphdGlvbjonKQ0KYGBgDQpBc8OtIHRvZG8gc3VjaW8gY3JlbyBkb3MgY29sdW1uYXM6DQpgYGB7cn0NCnVyYmFuJHBvcF91cmIyPXN0cl9zcGxpdChzdHJpbmcgPSB1cmJhbiRVcmJhbml6YXRpb24sDQogICAgICAgICAgICAgICAgICAgICAgICAgcGF0dGVybiA9ICdyYXRlIG9mIHVyYmFuaXphdGlvbjonLA0KICAgICAgICAgICAgICAgICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDFdDQoNCnVyYmFuJHJhdGVfdXJiMj1zdHJfc3BsaXQoc3RyaW5nID0gdXJiYW4kVXJiYW5pemF0aW9uLA0KICAgICAgICAgICAgICAgICAgICAgICAgICBwYXR0ZXJuID0gJ3JhdGUgb2YgdXJiYW5pemF0aW9uOicsDQogICAgICAgICAgICAgICAgICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDJdDQpgYGANCg0KTGltcGlhciBsYSBwcmltZXJhIGNvbHVtbmE6DQpgYGB7cn0NCnVyYmFuJHBvcF91cmIyWzFdDQpgYGANCmBgYHtyfQ0KdXJiYW4kcG9wX3VyYjI9c3RyX3NwbGl0KHVyYmFuJHBvcF91cmIyLA0KICAgICAgICAgICAgICAgICAgICAgICAgICclIG9mIHRvdGFsJywNCiAgICAgICAgICAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpWywxXQ0KDQojYWhvcmE6DQp1cmJhbiRwb3BfdXJiMlsxXQ0KYGBgDQoNCmBgYHtyfQ0KdXJiYW4kcG9wX3VyYjI9c3RyX3NwbGl0KHVyYmFuJHBvcF91cmIyLA0KICAgICAgICAgICAgICAgICAgICAgICAgICc6JywNCiAgICAgICAgICAgICAgICAgICAgICAgICBzaW1wbGlmeSA9IFQpWywyXQ0KDQojdGVuZ28NCnVyYmFuJHBvcF91cmIyDQpgYGANCg0KTGEgbWlzbWEgZXN0cmF0ZWdpYToNCmBgYHtyfQ0KdXJiYW4kcmF0ZV91cmIyWzFdDQpgYGANCmBgYHtyfQ0KdXJiYW4kcmF0ZV91cmIyPXN0cl9zcGxpdCh1cmJhbiRyYXRlX3VyYjIsDQogICAgICAgICAgICAgICAgICAgICAgICAgJyUnLA0KICAgICAgICAgICAgICAgICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDFdDQojdGVuZW1vczoNCmhlYWQodXJiYW5bLC0yXSkgI21lbm9zIGxhIGNvbHVtbmEgMg0KYGBgDQoNCjMuICBQYXJzZXJzOg0KDQpgYGB7cn0NCmxpYnJhcnkocmVhZHIpDQoNCnBhcnNlX251bWJlcih4ID0gIiQxMzksMTAwIDMyIikNCmBgYA0KUGVybyBzb2xvIHJlY3VwZXJhIEVMIFBSSU1FUiBWQUxPUjoNCmBgYHtyfQ0KcGFyc2VfbnVtYmVyKHVyYmFuJFVyYmFuaXphdGlvbikNCmBgYA0KQ29tYmluYXJsbyBjb24gbGEgZXN0cmF0ZWdpYSBzZXBhcmFkb3JhOg0KYGBge3J9DQpsaWJyYXJ5KG1hZ3JpdHRyKSAjIHBhcmEgJT4lDQoNCnN0cl9zcGxpdChzdHJpbmcgPSB1cmJhbiRVcmJhbml6YXRpb24sDQogICAgICAgICAgcGF0dGVybiA9ICdyYXRlIG9mIHVyYmFuaXphdGlvbjonLA0KICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDFdJT4lcGFyc2VfbnVtYmVyKCkNCmBgYA0KDQpgYGB7cn0NCnN0cl9zcGxpdChzdHJpbmcgPSB1cmJhbiRVcmJhbml6YXRpb24sDQogICAgICAgICAgcGF0dGVybiA9ICdyYXRlIG9mIHVyYmFuaXphdGlvbjonLA0KICAgICAgICAgIHNpbXBsaWZ5ID0gVClbLDJdJT4lcGFyc2VfbnVtYmVyKCkNCmBgYA0KDQpTb2xvIHRlIHNhY2EgbG9zIHZhbG9yZXMsIHlhIG5vIGxldHJhcyBxdWUgbcOhcyBsaW1waWFyLg0KDQo0LiBPdHJhcyBmdW5jaW9uZXMNCg0KRnVuY2lvbiAiZ3N1YiI6DQpgYGB7cn0NCnBvcmNlbnRhamVzPWMoJzEzJScsJzMzJScsJzU1JScpDQpnc3ViKCclJywiIixwb3JjZW50YWplcykgIyBsbyByZWVtcGxhemEgcG9yIG5hZGEgJycuDQpgYGANCg0KYGBge3J9DQpnc3ViKCcsfFxcJCcsIiIsIiQxMzksMTAwIikNCmBgYA0KdmVyaWZpY2FyIGVsIHRpcG8gZGUgZGF0b3M6DQpgYGB7cn0NCnN0cih1cmJhbikNCmBgYA0KRWxpbWluYW1vcyBjb2x1bW5hcyByZXBldGlkYXM6DQpgYGB7cn0NCnVyYmFuWyxjKDIsNSw2KV09TlVMTA0KYGBgDQpMYXBwbHktIGxhIGZ1bmNpb24gZW4gdmFyaWFzIGNvbHVtbmFzLg0KYGBge3J9DQp1cmJhblssLTFdPWxhcHBseSh1cmJhblssLTFdLCBhcy5udW1lcmljKQ0KYGBgDQp2YWxvcmVzIHBlcmRpZG9zOg0KYGBge3J9DQp1cmJhblshY29tcGxldGUuY2FzZXModXJiYW4pLF0NCmBgYA0KRWxpbWluYXIgZXNwYWNpb3MgZW4gYmxhbmNvIGFudGVzIHkgZGVzcHVlcyBkZWwgdGV4dG86DQpgYGB7cn0NCnRleHRvcz1jKCcgYWJjJywncHFyICcsICcgeHl6ICcpDQp0cmltd3ModGV4dG9zLHdoaXRlc3BhY2UgPSAiW1xcaFxcdl0iKQ0KYGBgDQpgYGB7cn0NCnVyYmFuJENvdW50cnk9dHJpbXdzKHVyYmFuJENvdW50cnksd2hpdGVzcGFjZSA9ICJbXFxoXFx2XSIpDQpgYGANCmBgYHtyfQ0Kc3RyKHVyYmFuKQ0KYGBgDQoNCkVKRVJDSUNJT1M6DQoNCg0KDQoNCg0KDQoNCg0KDQoNCg0K</div>
 
 
 
@@ -1802,7 +2164,7 @@ $(document).ready(function () {
 <!-- code folding -->
 <script>
 $(document).ready(function () {
-  window.initializeSourceEmbed("2. Limpieza de datos");
+  window.initializeSourceEmbed("CLAS2.Rmd");
   window.initializeCodeFolding("show" === "show");
 });
 </script>

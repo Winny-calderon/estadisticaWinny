@@ -1,0 +1,263 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+##CLASE 2## PRE PROCESAMIENTO DE DATOS
+
+```{r}
+library(htmltab) 
+
+linkCIA_urb = "https://www.cia.gov/library/publications/resources/the-world-factbook/fields/349.html"
+linkPath_urb='//*[@id="fieldListing"]'
+
+urban = htmltab(doc = linkCIA_urb, 
+                which =linkPath_urb)
+```
+
+```{r}
+head(urban)
+```
+
+```{r}
+# Ver el primer valor de la segunda columna #fila 1, columna 2
+urban[1,2]
+```
+Para separar esas dos variables--
+
+1. USO DE EXPRESIONES REGULARES:
+
+```{r}
+library(stringr)
+#me extrae cada numero
+str_extract_all(string = '25.3%,0% y 23.5% 13 34 hola',pattern="\\d")
+```
+```{r}
+# me trae numeros adyacentes:
+str_extract_all('25.3%,0% y 23.5% 13 34 hola',
+                "\\d+") # + es al menos 1 / * es 0 o más
+```
+```{r}
+# numero entero, seguido opcionalmente de punto, mas numero de una o mas cifras.
+str_extract_all('25.3%,0% y 23.5% 13 34 hola',
+                "\\d+\\.*\\d*")
+```
+
+```{r}
+# numero entero, seguido opcionalmente de punto, mas numero de una o mas cifras, seguido de %.
+str_extract_all('25.3%,0% y 23.5% 13 34 hola',
+                "\\d+\\.*\\d*\\%")
+```
+```{r}
+# porcentaje sin el simbolo #SOLO LOS QUE TENEN PORCENTAJE PERO NO ME PONGAS EL SIMBOLO:
+
+#  que antes de (?=\\%) haya (\\d+\\.*\\d*)
+#  pero solo trae (\\d+\\.*\\d*)
+    
+str_extract_all('25.3%,0% y 23.5% 13 34 hola',
+                "(\\d+\\.*\\d*)(?=\\%)")
+```
+CASO DE NUMEROS NEGATIVOS:
+
+```{r}
+# porcentaje sin el simbolo
+str_extract_all('25.3%,0% y -23.5% 13 34 hola',
+                "(\\d+\\.*\\d*)(?=\\%)")
+```
+```{r}
+# porcentaje sin el simbolo pero con signo negativo, si hubiese
+# SIN EL SIMBOLO DE PORCENTAJE PERO SI EL NEGATIVO
+str_extract_all('25.3%,0% y -23.5% 13 34 hola',
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")
+```
+
+MÁS DETALLES:
+```{r}
+# con [[1]] recien accedemos al elemento:
+str_extract_all('25.3%, 0% y 23%',
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")[[1]]
+```
+```{r}
+# primer valor es #APLICALE TODO SOLO A MI PRIMER VALOR:
+str_extract_all('25%, 0% y 23.5%',
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")[[1]][1]
+```
+```{r}
+# segundo valor es
+str_extract_all('25%, 0% y 23.5%',
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")[[1]][2]
+```
+```{r}
+# tercer valor es
+str_extract_all('25%, 0% y 23.5%', 
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")[[1]][3]
+```
+APLICANDO A LA COLUMNA:
+```{r}
+str_extract_all(urban$Urbanization,
+                "(\\-*\\d+\\.*\\d*)(?=\\%)")
+```
+Simplify facilita el trabajo:
+```{r}
+str_extract_all(urban$Urbanization,
+                "(\\-*\\d+\\.*\\d*)(?=\\%)",
+                simplify = T)
+```
+
+Esa matriz ya me dice que hacer en cada columna:
+```{r}
+PATRON="(\\-*\\d+\\.*\\d*)(?=\\%)"
+COLSUCIA=urban$Urbanization
+
+# UNA COLUMNA
+urban$pop_urb=str_extract_all(string = COLSUCIA,
+                              pattern= PATRON,
+                              simplify = T)[,1]
+
+# OTRA COLUMNA
+urban$rate_urb=str_extract_all(string = COLSUCIA,
+                               pattern=PATRON,
+                               simplify = T)[,2]
+```
+
+```{r}
+head(urban[,-2]) # sin mostrar la columna 'sucia'
+```
+
+2.  USO DE PARTICIONES
+
+Hacer lo mismo pero a través de particiones:
+```{r}
+# recuerda:
+test=urban[1,2]
+test
+```
+Buscar texto que permita dividir la cadena de texto:
+```{r}
+str_split(string = test,
+          pattern = 'rate of urbanization:')
+```
+Así todo sucio creo dos columnas:
+```{r}
+urban$pop_urb2=str_split(string = urban$Urbanization,
+                         pattern = 'rate of urbanization:',
+                         simplify = T)[,1]
+
+urban$rate_urb2=str_split(string = urban$Urbanization,
+                          pattern = 'rate of urbanization:',
+                          simplify = T)[,2]
+```
+
+Limpiar la primera columna:
+```{r}
+urban$pop_urb2[1]
+```
+```{r}
+urban$pop_urb2=str_split(urban$pop_urb2,
+                         '% of total',
+                         simplify = T)[,1]
+
+#ahora:
+urban$pop_urb2[1]
+```
+
+```{r}
+urban$pop_urb2=str_split(urban$pop_urb2,
+                         ':',
+                         simplify = T)[,2]
+
+#tengo
+urban$pop_urb2
+```
+
+La misma estrategia:
+```{r}
+urban$rate_urb2[1]
+```
+```{r}
+urban$rate_urb2=str_split(urban$rate_urb2,
+                         '%',
+                         simplify = T)[,1]
+#tenemos:
+head(urban[,-2]) #menos la columna 2
+```
+
+3.  Parsers:
+
+```{r}
+library(readr)
+
+parse_number(x = "$139,100 32")
+```
+Pero solo recupera EL PRIMER VALOR:
+```{r}
+parse_number(urban$Urbanization)
+```
+Combinarlo con la estrategia separadora:
+```{r}
+library(magrittr) # para %>%
+
+str_split(string = urban$Urbanization,
+          pattern = 'rate of urbanization:',
+          simplify = T)[,1]%>%parse_number()
+```
+
+```{r}
+str_split(string = urban$Urbanization,
+          pattern = 'rate of urbanization:',
+          simplify = T)[,2]%>%parse_number()
+```
+
+Solo te saca los valores, ya no letras que más limpiar.
+
+4. Otras funciones
+
+Funcion "gsub":
+```{r}
+porcentajes=c('13%','33%','55%')
+gsub('%',"",porcentajes) # lo reemplaza por nada ''.
+```
+
+```{r}
+gsub(',|\\$',"","$139,100")
+```
+verificar el tipo de datos:
+```{r}
+str(urban)
+```
+Eliminamos columnas repetidas:
+```{r}
+urban[,c(2,5,6)]=NULL
+```
+Lapply- la funcion en varias columnas.
+```{r}
+urban[,-1]=lapply(urban[,-1], as.numeric)
+```
+valores perdidos:
+```{r}
+urban[!complete.cases(urban),]
+```
+Eliminar espacios en blanco antes y despues del texto:
+```{r}
+textos=c(' abc','pqr ', ' xyz ')
+trimws(textos,whitespace = "[\\h\\v]")
+```
+```{r}
+urban$Country=trimws(urban$Country,whitespace = "[\\h\\v]")
+```
+```{r}
+str(urban)
+```
+
+EJERCICIOS:
+
+
+
+
+
+
+
+
+
+
+

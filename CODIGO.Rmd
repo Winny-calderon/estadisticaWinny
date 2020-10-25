@@ -1,0 +1,143 @@
+---
+title: "BASE PARA EL EXAMEN"
+output: html_notebook
+---
+Abriendo todos los paquetes a utilizar:
+```{r}
+library(rio)
+library(rgdal)
+library(htmltab)
+library(sp)
+library(geojsonio)
+library(rgdal)
+library(stringr)
+library(magrittr) # para %>% (PARSERS)
+```
+
+##CLASE 1##
+
+Trayendo nuestra data:
+# Primera forma:
+```{r}
+#crear objeto:
+Link="https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_daily_reports_us/09-10-2020.csv"
+#traemos la data de ese link y le ponemos algun nombre:
+data_jh = import(link)
+
+```
+Ver los detalles de la data: Variables y estructura
+```{r}
+dim(dataStata) ---".dta"  #filas #columnas
+dim(dataSpss) --- ".sav"
+dim(dataExcel) --- ".xlsx"
+dim(dataCSV) --- ".scv"
+
+
+names(trabajadores)
+str(trabajadores)
+```
+
+# Segunda forma:Scrapear una tabla
+Copiamos el link y el xpath y creamos los elementos:
+```{r}
+site1="https://en.wikipedia.org/wiki/World_Happiness_Report"
+xpath1='//*[@id="mw-content-text"]/div/table/tbody'
+```
+Aplicamos el comando "htmlab":
+```{r}
+happy= htmltab(doc =site1,
+               which =xpath1)
+```
+Detalles de la data scrapeada:
+```{r}
+head(happy)
+tail(happy)
+str(happy)
+```
+
+Nociones básicas:
+```{r}
+#creando un propio objeto
+nombre=c("Juan", "Pedro", "Pablo") #nombre como concatenaciòn de 3 objetos de clase caracter.
+nombre
+
+edad= c(18, 19, 25)
+edad
+
+examen = c (TRUE, FALSE, TRUE)  #clase lògica
+examen
+
+musica = c ("rock", "salsa", "rap")  #caracter. Cada vez que no es nùmero o logico, pondremos comillas
+musica
+
+examen[2]
+
+#DATA FRAME: AGRUPAR VARIABLES QUE LUEGO ME PERMITE VER SUS INFOS (frecuencias, etc)
+
+base=data.frame(nombre, edad, examen, musica, stringsAsFactors = F)
+base
+class(base)
+str(base) #nos sale 1ero el tipo de objetos con el que nos estamos enfrentando; leugo el numero de observaciones dentre del DF. las observaciones son las filas y variables son columnas
+
+#varias columnas de vectores de distinto tipo: data frame
+#columnas del mismo tipo: matriz
+```
+
+##CLASE 2## PRE PROCESAMIENTO DE DATOS: OTRO SCRIPT C22
+Convertir numerica
+```{r}
+data$agricultura2 = as.numeric(data$agricultura2)
+#o tambien:
+urban[,-1]=lapply(urban[,-1], as.numeric)
+```
+Eliminamos columnas repetidas:
+```{r}
+urban[,c(2,5,6)]=NULL
+```
+Eliminar espacios en blanco antes y despues del texto:
+```{r}
+urban$Country=trimws(urban$Country,whitespace = "[\\h\\v]")
+```
+gsub:
+```{r}
+gsub(',|\\$',"","$139,100")
+```
+
+```{r}
+#cambio de nombre
+names(elec) = c("País", "Electricidad")
+head(elec)
+```
+```{r}
+summary(dataedad$promedio)
+```
+
+Corregir los etiquetados:
+```{r}
+names(democracy)=str_split(string = names(democracy),
+          pattern = ' >>', simplify = T)[,1]
+```
+Corregir los espacios en blanco
+```{r}
+names(democracy)=gsub(" ", "",names(democracy))
+```
+corregir las letras A medias extrañas:
+```{r}
+#en Country
+democracy$Country=gsub("Â", "",democracy$Country)
+
+#en todos los etiquetados
+names(democracy)=gsub("Â", "",names(democracy))
+```
+
+##CLASE 3##
+
+
+
+
+
+
+
+
+
+

@@ -384,12 +384,19 @@ comparison[1,4]
 
 ```{r}
 str_extract_all(comparison$`GDP - per capita (PPP)`,
-                "(\\d+\\.*\\d*)(?=\\%)")
-str_extract_all(comparison$`GDP - per capita (PPP)`,
                 "(\\-*\\d+\\.*\\d*)(?=\\%)")
 head(comparison)
+
+
 ```
 
+```{r}
+comparison$`Date of Information`= str_split(comparison$`Date of Information`,
+                                            ' ',
+                                            simplify = T)[,1]
+str(comparison$`Date of Information`)
+comparison$`Date of Information`=as.numeric(comparison$`Date of Information`)
+```
 
 
 EJERCICIO 4: 

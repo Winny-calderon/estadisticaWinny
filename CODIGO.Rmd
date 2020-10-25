@@ -12,6 +12,18 @@ library(geojsonio)
 library(rgdal)
 library(stringr)
 library(magrittr) # para %>% (PARSERS)
+library(dplyr)
+library(tidyr)
+library(stringr)
+library(cluster)
+library(plyr) # para funcion "each"
+library(psych) #para hacer tablas comparadas
+library(knitr) #para generar tablas html
+library(kableExtra) #para generar tablas html
+library(factoextra) #visualización de clusters
+library(ggrepel) #para que las etiquetas de los graficos no se superpongan
+library(cluster)
+
 ```
 
 ##CLASE 1##
@@ -94,6 +106,12 @@ Eliminamos columnas repetidas:
 ```{r}
 urban[,c(2,5,6)]=NULL
 ```
+Otra forma es elegir solo cuales queremos y trabjar con ellos, renonbrarlos, etc:
+```{r}
+gdp = gdp[,c(2,3)]
+names(gdp) = c("Pais", "PBI")
+```
+
 Eliminar espacios en blanco antes y despues del texto:
 ```{r}
 urban$Country=trimws(urban$Country,whitespace = "[\\h\\v]")
@@ -130,11 +148,186 @@ democracy$Country=gsub("Â", "",democracy$Country)
 names(democracy)=gsub("Â", "",names(democracy))
 ```
 
+Cambiando el nombrede la columna score de democ:
+```{r}
+names(democ)[names(democ)=='Score']='ScoreDemo'
+```
+
 ##CLASE 3##
+1.  MERGE: después de todo limpio y con etiquetas adecuadas
+Nos fijamos cual es el "key", y eliminamos las variables que no nos sirven.
+```{r}
+str(variable) #fijarnos la estructura y el posible key
+names(gdp)
+```
 
+Unimos las tablas, de dos en dos:
+```{r}
+#key se representa con el "by"
+corrgdp=merge(corru,gdp,by.x='Country', by.y='Country') #x es data frame derecha y "y", a la izquirda
+corrgdpdemo=merge(corrgdp,democ)
+```
 
+Vemos el resultado:
+```{r}
+# cabecera
+head(corrgdpdemo)
+```
+```{r}
+# cola
+tail(corrgdpdemo)
+```
 
+2. Se formatea la escala:
+Key debe estar en texto (chr)
 
+NUMÉRICA
+```{r}
+#lapply pues es lit para toda la base
+corrgdpdemo[,c(2:6)]=lapply(corrgdpdemo[,c(2:6)],as.numeric)
+```
+No debe de salir NAs sino probelma de limpieza.
+
+NOMINAL:
+primero hacemos tabla:
+```{r}
+table(corrgdpdemo$Region)
+```
+```{r}
+corrgdpdemo$Region=as.factor(corrgdpdemo$Region)
+#no lapply poque solo es una columna
+```
+
+ORDINAL:
+```{r}
+#como antes, verificamos niveles:
+table(corrgdpdemo$Regimetype)
+```
+Ahora recodificaremos! atenta con los numeros en orden ascendente
+```{r}
+library(dplyr)
+
+corrgdpdemo$Regimetype= recode(corrgdpdemo$Regimetype,
+       'Full democracy'='4FullDemocracy',
+       'Flawed democracy'='3FlawedDemocracy',
+       'Hybrid regime'='2Hybrid regime',
+       'Authoritarian'='1Authoritarian')
+
+#poner numero delante, ayuda a crear una ordinal
+corrgdpdemo$Regimetype=as.ordered(corrgdpdemo$Regimetype)
+```
+Ahora ya esta listo para los estadisticos
+```{r}
+summary(corrgdpdemo)
+```
+
+3. Appending: unir varias tabls en una sola, odas tienen los mismos nombres de columnas.
+
+VE SUS COLUMNAS: TIENEN LAS MISMAS O NO?
+```{r}
+names(df1) ; names(df2) ; names(df3); names(df4)
+```
+Vemos si tienen difrentes entrevistados o no
+```{r}
+head(df2)
+```
+```{r}
+head(df4)
+```
+Anexarlas con rbind para tener solo un data frame:
+```{r}
+df1234=rbind(df1,df2,df3,df4)
+```
+
+4. Aggregating
+
+Tipos de datos
+```{r}
+str(agua)
+```
+```{r}
+head(agua)
+```
+Crear data frame a nivel de departamento
+```{r}
+aggregate(cbind(todaSemana, NoTodaSemana) # dependientes
+          ~ Departamento, # nivel
+          data = agua,    # data
+          sum)            # operacion
+```
+A nivel de provincia
+```{r}
+aggregate(cbind(todaSemana, NoTodaSemana) ~ Provincia + Departamento, 
+          data = agua, sum)
+```
+
+##Merge pasos según Cristian:
+
+SE VA FUSIONANDO BASE POR BASE: Juntando bases de datos (urban y gdp)
+
+```{r}
+names(urban)
+names(gdp)
+#entonces le pedimos que nos fusione las datas en base a la variable común: país
+total1=merge(urban,gdp,by.x='Pais', by.y='Pais') 
+head(total1)
+```
+
+Este nuevo objeto creado qué peculiaridad tiene respecto de los objetos de insumo?
+
+Manera alternativa de fusionar:
+```{r}
+total2=merge(urban,gdp,all.x=T,all.y=T) #nos aseguramos de incluir todos nuestros casos
+#esto signfica que estamos pidiendo que "todos los valores de X sean incluidos" y también "todos los valores de y". Presupone que la primera columna será la columna guía
+head(total2)
+```
+
+Chequeamos que no tengamos valores duplicados
+
+```{r}
+total1[duplicated(total1$Pais),]
+#verifica si en la columna país hay duplicados.
+```
+
+Filas incompletas
+
+```{r}
+total2[!complete.cases(total2),] #para verificar si hay casos en una base de datos que no hay en la otra
+```
+
+Ahora pasamos a fusionar con la tercera base: cdio
+
+```{r}
+total=merge(total2,cdio,all.x=T,all.y=T)
+
+head(total)
+```
+
+Revisando casos duplicados e incompletos
+
+```{r}
+total[duplicated(total$Pais),]
+total[!complete.cases(total),]
+```
+
+Buscando casos que no deben estar incluidos
+
+```{r}
+?grep
+total[grep("World|Euro",total$Pais),]
+```
+
+Eliminando esos datos
+
+```{r}
+total=total[-grep("World|Euro",total$Pais),]
+```
+
+Viendo la data fusionada final
+```{r}
+head(total)
+str(total)
+```
 
 
 

@@ -16,22 +16,34 @@ demo<- htmltab(doc = demolink, which =demopath)
 ```{r}
 library(stringr)
 library(magrittr)
-names(demo)=str_split(names(demo),">>",simplify = T)[,1]%>%gsub('\\s','',.)
+names(demo)=str_split(names(demo)," >>",simplify = T)[,1]%>%gsub('\\s','',.)
 demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], trimws,whitespace = "[\\h\\v]") # no blanks
+#en Country
+demo$Country=gsub("Â", "",demo$Country)
+
+#en todos los etiquetados
+names(demo)=gsub("Â", "",names(demo))
 ```
 
 3. Preparación
 ```{r}
 demo$Country=trimws(demo$Country,whitespace = "[\\h\\v]")
 demo=demo[,-c(1)] #sin Rank
-demo[,-c(1,8,9,10)]=lapply(demo[,-c(1,8,9,10)], as.numeric) # a numerico
 demo=demo[,-c(10)]
+demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], as.numeric) # a numerico
+
 
 ```
 
 ```{r}
 str(demo)
 ```
+```{r}
+demo$Continent=demo$Region
+demo$Region=NULL
+str(demo$Continent)
+```
+
 
 4. Paso previos al cluster
 ```{r}
@@ -49,7 +61,7 @@ demo=na.omit(demo)
 ```{r}
 library(cluster)
 
-# usar en C() las dimensiones de interes: #GOWER: TODAS LAS CONVINACINES POSIBLES.
+# usar en C() las dimensiones de interes: #GOWER: TODAS LAS COMBINACINES POSIBLES.
 g.dist = daisy(demo[,c(3:7)], metric="gower")
 ```
 2. Proponer cantidad de clusters

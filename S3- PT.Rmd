@@ -2,7 +2,7 @@
 title: "PREPARACIÓN DE TABLA DE DATOS"
 output: html_notebook
 ---
-##MERGING##
+##MERGING##: combina data frames con campo en comun (key)
 ```{r}
 library(rio)
 ```
@@ -63,6 +63,7 @@ corru$Region=NULL
 ```
 Key=Country
 ```{r}
+#key se representa con el "by"
 corrgdp=merge(corru,gdp,by.x='Country', by.y='Country') #x es data frame derecha y "y", a la izquirda
 corrgdpdemo=merge(corrgdp,democ)
 ```
@@ -95,6 +96,7 @@ No hay NA'S por ende no hay problemas de limpieza!
 A nominal
 ```{r}
 table(corrgdpdemo$Region)   #OK
+str(corrgdpdemo$Region)
 ```
 ```{r}
 corrgdpdemo$Region=as.factor(corrgdpdemo$Region)

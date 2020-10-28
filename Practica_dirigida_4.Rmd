@@ -5,6 +5,9 @@ output: html_notebook
 CONGLOMERADOS - MÉTODO PARTICIONANTE
 
 PAQUETES
+No Jerarquica: Cuando nosotros le decimos cuantos grupos debe de sacar. 
+Jerarquica: Nosotros no les decimos al programa cuantos queremos. 
+
 ```{r}
 library(rio)
 library(cluster)
@@ -50,7 +53,7 @@ Generar centroides y calcular la distancia de lso casos con este centroide.
 Para hacer el cálculo de la distancia utilizaremos 3 variables: agua, desague y electrificación. 
 
 ```{r}
-head(data)[, c(3:5)]  #solo nos muestra las variables que hemos seleccionado, agregarlas al caluclo para agrupar los casos.
+head(data)[, c(3:5)]  #solo nos muestra las variables que hemos seleccionado, agregarlas al calculo para agrupar los casos.
 dist = daisy(data[,c(3:5)], metric = "gower") 
 #daisy --> distancia ; columnas, metric = "gower" (SIEMRE SE USA)
 # seleccionamos las columnas de insumo
@@ -62,7 +65,7 @@ dist = daisy(data[,c(3:5)], metric = "gower")
 Proponemos agrupar a los distritos en 2 grupos según su nivel de cobertura de servicios públicos básicos (agua, desague y electrificación) METODO:  NO JERARQUICO PARTICIONANTE
 
 ```{r}
-grupos = pam(dist, 4, cluster.only = T) #Le decimos que cree dos grupos o cluster
+grupos = pam(dist, 4, cluster.only = T) #Le decimos que cree dos grupos o cluster --- 4: el numero de cluster que queremos generar.
 data$grupos = grupos #crear columna
 #se podría usar cluster.only = F (sino todo un paquete con toda la información); cluster.only = T (solo cluster)
 ```
@@ -100,7 +103,7 @@ describeBy(as.matrix(cbind(data[,c(4:6)])), group=data$grupos, digits = 2)
 ```
 Que nos muestre los descrptivos por grupos, pero de un conjunto de columnas: desague, elet y esper. Esta es prefereible por tiempo.
 
-También usar aggregate() para crear una nueva base que sean los resultados: Aggregate sirve para simplicar la info que tenemos en una base de datos de acuerdo a grupos que hemos identidificado.Creamos un nuevo objeto
+También usar aggregate() para crear una nueva base que sean los resultados: Aggregate sirve para simplicar la info que tenemos en una base de datos de acuerdo a grupos que hemos identidificado.Creamos un nuevo objeto. Aqui ya creamos ua tabla
 ```{r}
 aggregate(as.matrix(cbind(data[,c(3:5)]))~ grupos, data=data, mean)
 #agreggate: tomar de referencia un nivel de una variable y con todos los casos que cumplan esos niveles va a hacer una operación matemática 

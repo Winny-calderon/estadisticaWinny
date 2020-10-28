@@ -329,6 +329,135 @@ head(total)
 str(total)
 ```
 
+##CLASE 4: METODO PARTICIONANTE## Según lo hecho por Christian:
+
+  1: Agrupar los departamentos según cobertura de servicios públicos básicos (agua, desague, electrificación)
+
+ 
+```{r}
+data <- import("https://github.com/DataPolitica/salidas/raw/master/Data/regiones.xlsx")
+str(data)
+summary(data)
+```
+
+  1.1: Asignar nombre a filas y seleccionar sólo aquellos casos sin NA´s en las variables de nuestro interés:
+
+```{r}
+#Asignemos un  nombre a cada fila (al igual que le ponemos nombre a las columnas). Esto nos ayudará más adelante durante la elaboración de los gráficos.
+#Para dar nombre a las variables de las filas. 
+
+View(data) #Configurar el nombre de as regiones en filas:
+row.names(data)=data$region
+View(data) 
+#ELIMINAR LA SIGUIENTE:
+data = data[,-1]
+#EVITAR VALORES PERDIDOS
+```
+
+  2: Calcular la distancia entre los conglomerados:
+
+```{r}
+head(data)[, c(3:5)]  #solo nos muestra las variables que hemos seleccionado, agregarlas al calculo para agrupar los casos.
+dist = daisy(data[,c(3:5)], metric = "gower") 
+#daisy --> distancia ; columnas, metric = "gower" (SIEMRE SE USA)
+# seleccionamos las columnas de insumo
+# usamos metric="gower" para estandarizar cada variable. Importante. 
+```
+
+  3: Crear los conglomerados
+
+Proponemos agrupar a los distritos en 2 grupos según su nivel de cobertura de servicios públicos básicos (agua, desague y electrificación) METODO:  NO JERARQUICO PARTICIONANTE
+Metodo No Jerarquico: Cuando nosotros le decimos cuantos grupos debe de sacar. 
+Metodo Jerarquico: Nosotros no les decimos al programa cuantos queremos. 
+```{r}
+grupos = pam(dist, 2, cluster.only = T) #Le decimos que cree dos grupos o cluster --- K=2: el numero de cluster que queremos generar.
+data$grupos = grupos #crear columna
+#se podría usar cluster.only = F (sino todo un paquete con toda la información); cluster.only = T (solo cluster)
+```
+.
+
+  4: Analizar descriptivamente cada grupo
+
+```{r}
+#Opcional, para recordar las clases de Estadísitca I
+# Veamos los descriptivos de la variable "Agua" (columna N° 4) entre los grupos
+describeBy(data$agua, group=data$grupos, digits = 2)
+#va a describir agua entre los grupos 1 y 2. El prmedio de agua del grupo 1 tiene 53 y del grupo 2, 72. Pues el 2do tiene una media más alta.
+
+# Veamos los descriptivos de la variable "Desague" (columna N° 5) entre los grupos
+describeBy(data$desague, group=data$grupos, digits = 2)
+
+# Veamos los descriptivos de la variable "Electrificacion" (columna N° 6) entre los grupos
+describeBy(data$electrificacion, group=data$grupos, digits = 2)
+#Interesante: el promedio de electricidad no varía mucho entre ambos grupos
+
+#DESCRIPTIVOS DE LA VARIABLE POBREZA: 
+  describeBy(data$pobreza, group=data$grupos, digits = 2)
+  #se puede ver que en el grupo 1, la pobreza es más fuerte que en el grupo 2, la pobreza es más leve. 
+  #El grupo 2 está mejor que el grupo 1 respecto a las variables analizadas. 
+```
+
+Si deseamos podemos solicitar dichos resultados al mismo tiempo:
+```{r}
+describeBy(as.matrix(cbind(data[,c(4:6)])), group=data$grupos, digits = 2)
+#as matrix nos permite ahorrar tiempo y agrupar todas las variables de una
+```
+
+```{r}
+aggregate(as.matrix(cbind(data[,c(3:5)]))~ grupos, data=data, mean)
+#agreggate: tomar de referencia un nivel de una variable y con todos los casos que cumplan esos niveles va a hacer una operación matemática 
+
+#Guardamos la visualización en un data.frame
+tabla = aggregate(as.matrix(cbind(data[,c(3:5)]))~ grupos, data=data, mean)
+
+#para transponer (que las columnas sean filas y las filas sean columnas):
+tabla = t(as.data.frame(tabla))
+tabla
+#Para mostrar los promedios de sus variables de insumo por GRUPOS. 
+```
+
+Podemos guardar en formato amigable y generar una tabla
+```{r}
+#otra forma de generar la tabla: 
+tablahtml = kable(tabla, format = "html", digits = 2) 
+
+kable_styling(tablahtml) #para ver cómo queda la tabla (estilo)
+
+#Para ponerlo con fondo negro y verlo:
+kable_material_dark(tablahtml)
+```
+
+  5: Visualización de grupos en un gráfico
+
+```{r}
+data$grupos = as.factor(data$grupos)
+str(data$grupos)
+levels(data$grupos) = c("Baja cobertura", "Alta cobertura") #son 2, por el k=2. Mejor etiquetarlos para que sea más sencilla la interpretacion grafica.
+table(data$grupos)
+```
+
+```{r}
+fviz_cluster(object = list(data=dist, cluster = data$grupos),
+             geom = c("text"), 
+             ellipse.type = "convex")
+
+#fviz:cluster= Visualizar los resultados de la clusterizacion
+#Variables creados por el propio sist de cluster que representar mejor las categorías de insumo usadas: Dim 1 y Dim2: cateogorías resumen. COn eje x y eje y, vemos que los grupos estan distanciados. Hay una distnacia cosiderable entre ambos grupos, en terminos espaciales. Eje x y y son categ resumen de nuestras variables usadas en dos dimensiones.
+#las observaciones son distribuidas, utilizando componentes principaels (categoráis resumen de todas las columnas que hemos ingresado. Hay formas de generar variables que se parezcan a nuestras columnas de insumo. Este gráfico lo que genera son categorías resumen de lo que hemos utilizado en dos dimensiones.)
+```
+
+INTERPRETACION. en el gurpo de baja cobertura hay muchas regiones y en el otro hay menos. Hay una distancia considerable entre ambos. 
+```{r}
+fviz_cluster(object = list(data=dist, cluster = data$grupos),
+             geom = c("text"), 
+             ellipse = FALSE, labelsize = 10,
+             repel = T)
+# Decimos que elimine el elipse, cambiamos el nombre de la etiqueta y decimos que no se superpongan las etiquetas (repel= T). 
+```
+
+##CLASE 5: 
+
+
 
 
 

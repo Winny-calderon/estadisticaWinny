@@ -14,19 +14,21 @@ demo<- htmltab(doc = demolink, which =demopath)
 # limpieza
 library(stringr)
 library(magrittr)
-names(demo)=str_split(names(demo),">>",simplify = T)[,1]%>%gsub('\\s','',.)
+names(demo)=str_split(names(demo)," >>",simplify = T)[,1]%>%gsub('\\s','',.)
+demo$Country=gsub("Â", "",demo$Country)
+names(demo)=gsub("Â", "",names(demo))
 
 demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], trimws,whitespace = "[\\h\\v]") # no blanks #trimws: quitar los espacios en blanco
-demo$Country = gsub("Â", "", demo$Country)
-demo$Country=trimws(demo$Country,whitespace = "[\\h\\v]")
 
 # preparación
 demo=demo[,-c(1)] #sin Rank
+demo=demo[,-c(10)]
 demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], as.numeric) # a numerico
-
 
 # veamos que tenemos:
 str(demo)
+demo$Region-> demo$Continent
+demo=demo[,-c(9)]
 ```
 
 ###ESTRATEGIA AGLOMERATIVA:
@@ -68,7 +70,7 @@ table(demo$Regimetype,demo$clustAG,dnn = c('TheEconomist','clustAgg'))
 5. VISUALIZAR:
 Dendograma- proceso de conglomeracion
 ```{r}
-# Visualize
+# Visualizar
 fviz_dend(res.agnes,k=4, cex = 0.7, horiz = T)
 ```
 

@@ -21,7 +21,7 @@ links=list(web="https://en.wikipedia.org/wiki/Democracy_Index",
 demo<- htmltab(doc = links$web, which =links$xpath)
 
 # limpieza
-names(demo)=str_split(names(demo),">>",simplify = T)[,1]%>%gsub('\\s','',.)
+names(demo)=str_split(names(demo)," >>",simplify = T)[,1]%>%gsub('\\s','',.)
 demo[,-c(1,8,9)]=lapply(demo[,-c(1,8,9)], trimws,whitespace = "[\\h\\v]")
 #ELIMINANDO Â
 names(demo)=gsub('Â',"",names(demo))
@@ -46,7 +46,7 @@ str(demo)
 
 Calculo de la matriz de distacia añadiendo la semilla aleatoria:
 ```{r}
-set.seed(2019)
+set.seed(2019)  #lo da el profesor
 inputData=demo[,c(3:7)]
 g.dist = daisy(inputData, metric="gower")
 ```
@@ -56,7 +56,7 @@ Para saber cuantos clusters deberiamos calcular de forma aleatoria, haremos lo s
 1. ¿CUÁNTOS CLUSTER DEBO DE PEDIR? 
 
 Determinando cantidad de clusters:
-gap= e mejor numero de clusters a pedir
+gap= el mejor numero de clusters a pedir
 
   - para paticion
 ```{r}
